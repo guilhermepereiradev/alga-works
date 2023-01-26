@@ -34,9 +34,14 @@ public class TesteController {
 //        return restauranteRepository.findComFreteGratis(nome);
 //    }
 
+//    @GetMapping("/restaurantes/primeiro")
+//    public Optional<Restaurante> primeiroRestaurante(){
+//        return restauranteRepository.buscarPrimeiro();
+//    }
+
     @GetMapping("/restaurantes/primeiro")
-    public Optional<Restaurante> primeiroRestaurante(){
-        return restauranteRepository.buscarPrimeiro();
+    public List<Restaurante> buscarPorNome(@RequestParam String nome, @RequestParam Long id){
+        return restauranteRepository.consultarPorNome(nome, id);
     }
 
     @GetMapping("/cozinhas/primeiro")
