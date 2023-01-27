@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,7 +29,9 @@ public class Restaurante {
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-    @ManyToOne
+//    @JsonIgnore
+//    @JsonIgnoreProperties("hibernateLazyInitializer")
+    @ManyToOne //(fetch = FetchType.LAZY)
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
 
@@ -46,10 +49,11 @@ public class Restaurante {
     @Embedded
     private Endereco endereco;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos = new ArrayList<>();
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = @JoinColumn(name = "restaurante_id"),
