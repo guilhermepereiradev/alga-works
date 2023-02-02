@@ -13,6 +13,6 @@ import java.util.List;
 public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries, JpaSpecificationExecutor<Restaurante> {
     List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinhaId);
 
-    @Query("from Restaurante r join fetch r.cozinha left join fetch r.formasPagamento")
+    @Query("from Restaurante r join fetch r.cozinha")
     List<Restaurante> findAll();
 }
