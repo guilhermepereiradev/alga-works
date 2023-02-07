@@ -1,36 +1,26 @@
 package com.algaworks.algafood.domain.service;
 
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.CidadeNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
-import com.algaworks.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class CadastroCidadeService {
-
     @Autowired
     public CidadeRepository cidadeRepository;
 
     @Autowired
-    public EstadoRepository estadoRepository;
+    public CadastroEstadoService cadastroEstado;
 
     public Cidade salvar(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
-        Optional<Estado> estado = estadoRepository.findById(estadoId);
+        Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
 
-        if (estado.isEmpty()){
-            throw new EntidadeNaoEncontradaException(
-                    String.format("Estado não encontrado para o código %d", estadoId)
-            );
-        }
-
-        cidade.setEstado(estado.get());
+        cidade.setEstado(estado);
         return cidadeRepository.save(cidade);
     }
 
@@ -38,9 +28,11 @@ public class CadastroCidadeService {
         try {
             cidadeRepository.deleteById(id);
         }catch (EmptyResultDataAccessException e){
-            throw new EntidadeNaoEncontradaException(
-                    String.format("Cidade com código %d não encontrada", id)
-            );
+            throw new CidadeNaoEncontradoException(id);
         }
+    }
+
+    public Cidade buscarOuFalhar(Long id){
+        return cidadeRepository.findById(id).orElseThrow(() -> new CidadeNaoEncontradoException(id));
     }
 }
