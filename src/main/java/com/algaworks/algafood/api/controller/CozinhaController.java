@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.controller;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class CozinhaController {
     }
 
     @PostMapping
-    public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha){
+    public ResponseEntity<Cozinha> salvar(@RequestBody @Valid Cozinha cozinha){
         Cozinha novaCozinha = cadastroCozinha.salvar(cozinha);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(novaCozinha.getId()).toUri();
@@ -43,7 +44,7 @@ public class CozinhaController {
     }
 
     @PutMapping("/{id}")
-    public Cozinha atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha){
+    public Cozinha atualizar(@PathVariable Long id, @RequestBody @Valid Cozinha cozinha){
         Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(id);
 
         BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
