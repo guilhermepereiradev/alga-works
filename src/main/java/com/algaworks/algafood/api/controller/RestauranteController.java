@@ -1,5 +1,10 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.assembler.RestauranteInputDisassembler;
+import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
+import com.algaworks.algafood.api.model.RestauranteModel;
+import com.algaworks.algafood.api.model.input.CozinhaIdInput;
+import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -39,39 +44,42 @@ public class RestauranteController {
     @Autowired
     private SmartValidator validator;
 
+    @Autowired
+    private RestauranteModelAssembler restauranteModelAssembler;
+
+    @Autowired
+    private RestauranteInputDisassembler restauranteInputDisassembler;
+
 
     @GetMapping
-    public ResponseEntity<List<Restaurante>> listar(){
-        List<Restaurante> restaurantes = restauranteRepository.findAll();
-        return ResponseEntity.ok().body(restaurantes);
+    public ResponseEntity<List<RestauranteModel>> listar(){
+        return ResponseEntity.ok().body(restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurante> buscar(@PathVariable Long id){
-        Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(id);
-
-        return ResponseEntity.ok().body(restaurante);
+    public ResponseEntity<RestauranteModel> buscar(@PathVariable Long id){
+        return ResponseEntity.ok().body(restauranteModelAssembler.toModel(cadastroRestaurante.buscarOuFalhar(id)));
     }
 
     @PostMapping
-    public ResponseEntity<Restaurante> adicionar(@RequestBody @Valid Restaurante restaurante){
+    public ResponseEntity<RestauranteModel> adicionar(@RequestBody @Valid RestauranteInput restauranteInput){
         try{
-            restaurante = cadastroRestaurante.salvar(restaurante);
-            return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
+            Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante)));
         }catch (EntidadeNaoEncontradaException e){
             throw new NegocioException(e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restaurante){
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput restauranteInput){
         Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(id);
 
-        BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "edereco", "dataCadastro", "produtos");
+        restauranteInputDisassembler.copyToDomainObject(restauranteInput, restauranteAtual);
 
         try{
-            Restaurante restauranteSalvo = cadastroRestaurante.salvar(restauranteAtual);
-            return ResponseEntity.ok().body(restauranteSalvo);
+            return ResponseEntity.ok().body(restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restauranteAtual)));
         }catch (EntidadeNaoEncontradaException e){
             throw new NegocioException(e.getMessage());
         }
@@ -84,7 +92,16 @@ public class RestauranteController {
         merge(dadosOrigem, restauranteAtual, request);
 
         validate(restauranteAtual, "restaurante");
-        return atualizar(id, restauranteAtual);
+
+        CozinhaIdInput cozinhaIdInput = new CozinhaIdInput();
+        cozinhaIdInput.setId(restauranteAtual.getCozinha().getId());
+
+        RestauranteInput restauranteInput = new RestauranteInput();
+        restauranteInput.setNome(restauranteAtual.getNome());
+        restauranteInput.setTaxaFrete(restauranteAtual.getTaxaFrete());
+        restauranteInput.setCozinha(cozinhaIdInput)
+        ;
+        return atualizar(id, restauranteInput);
     }
 
     private void validate(Restaurante restaurante, String objectName) {

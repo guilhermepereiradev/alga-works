@@ -17,6 +17,8 @@
 
 	<properties>
 		<java.version>19</java.version>
+		<modelmapper.version>2.3.0</modelmapper.version>
+		<flyway-core.version>9.15.0</flyway-core.version>
 	</properties>
 
 	<dependencies>
@@ -54,7 +56,7 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-			<version>9.15.0</version>
+			<version>${flyway-core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -73,7 +75,12 @@
 			<artifactId>rest-assured</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>
