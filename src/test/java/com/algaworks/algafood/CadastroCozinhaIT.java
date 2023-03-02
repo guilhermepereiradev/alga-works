@@ -1,7 +1,9 @@
 package com.algaworks.algafood;
 
 import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
+import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.util.DatabaseCleaner;
 import com.algaworks.algafood.util.ResourceUtils;
 import io.restassured.RestAssured;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static io.restassured.RestAssured.given;
@@ -33,9 +36,15 @@ class CadastroCozinhaIT {
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
+    @Autowired
+    private RestauranteRepository restauranteRepository;
+
     private int numeroCozinhas;
 
     private Cozinha cozinha;
+
+    private Cozinha cozinhaEmUso;
+
 
     private int cozinhaIdInexistente;
 
@@ -76,48 +85,138 @@ class CadastroCozinhaIT {
     }
 
     @Test
-    public void deveRetornarStatus201_QuandoCadastraCozinha(){
+    public void deveRotarnarResposataEStatusCorretos_QuandoConsultarCozinhasExistentes(){
         given()
-                .body(jsonCorretoCozinhaChinesa)
-                .contentType(ContentType.JSON)
+                .pathParams("id", cozinha.getId())
                 .accept(ContentType.JSON)
         .when()
-                .post()
+                .get("/{id}")
         .then()
-                .statusCode(HttpStatus.CREATED.value());
-    }
-
-    @Test
-    public void deveRotarnarResposataEStatusCorretas_QuandoConsultarCozinhasExistentes(){
-        given()
-            .pathParams("id", cozinha.getId())
-            .accept(ContentType.JSON)
-        .when()
-            .get("/{id}")
-        .then()
-            .statusCode(HttpStatus.OK.value())
-            .body("nome", equalTo(cozinha.getNome()));
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", equalTo(cozinha.getNome()));
     }
 
     @Test
     public void deveRotarnarStatus404_QuandoConsultarCozinhasInexistente(){
         given()
-            .pathParams("id", cozinhaIdInexistente)
-            .accept(ContentType.JSON)
+                .pathParams("id", cozinhaIdInexistente)
+                .accept(ContentType.JSON)
         .when()
-            .get("/{id}")
+                .get("/{id}")
         .then()
-            .statusCode(HttpStatus.NOT_FOUND.value());
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void deveRetornarStatus201_QuandoCadastraCozinha(){
+        given()
+                .body(jsonCorretoCozinhaChinesa)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+            .when()
+                .post()
+            .then()
+                .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    public void deveRetornarStatus400_QuandoCadastraCozinhaInvalida(){
+        given()
+                .body("{\"nome\": \"\"}")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+        .when()
+                .post()
+        .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void deveRotarnarResposataEStatusCorretas_QuandoAtualizarCozinha(){
+        given()
+                .body(jsonCorretoCozinhaChinesa)
+                .pathParams("id", cozinha.getId())
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+        .when()
+                .put("/{id}")
+        .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", equalTo("Chinesa"));
+    }
+
+    @Test
+    public void deveRetornarStatus400_QuandoAtualizarCozinhaInvalida(){
+        given()
+                .body("{\"nome\": \"\"}")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+        .when()
+                .post()
+        .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void deveRotarnarStatus404_QuandoAtualizarCozinhaInexistente(){
+        given()
+                .body(jsonCorretoCozinhaChinesa)
+                .pathParams("id", cozinhaIdInexistente)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+        .when()
+                .put("/{id}")
+        .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void deveRetornarStatus200_QuandoRemoverCozinha(){
+        given()
+                .pathParams("id", cozinha.getId())
+                .accept(ContentType.JSON)
+        .when()
+                .delete("/{id}")
+        .then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void deveRetornarStatus404_QuandoRemoverCozinhaInexistente(){
+        given()
+                .pathParams("id", cozinhaIdInexistente)
+                .accept(ContentType.JSON)
+        .when()
+                .delete("/{id}")
+        .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void deveRetornarStatus409_QuandoRemoverCozinhaEmUso(){
+        given()
+                .pathParams("id", cozinhaEmUso.getId())
+                .accept(ContentType.JSON)
+        .when()
+                .delete("/{id}")
+        .then()
+                .statusCode(HttpStatus.CONFLICT.value());
     }
 
     private void preparaDados(){
-        Cozinha cozinha1 = new Cozinha();
-        cozinha1.setNome("Tailandesa");
+        cozinhaEmUso = new Cozinha();
+        cozinhaEmUso.setNome("Tailandesa");
 
         cozinha = new Cozinha();
         cozinha.setNome("Brasileira");
 
-        cozinhaRepository.saveAll(Arrays.asList(cozinha1, cozinha));
+        cozinhaRepository.saveAll(Arrays.asList(cozinhaEmUso, cozinha));
+
+        Restaurante restaurante = new Restaurante();
+        restaurante.setNome("Restaurante");
+        restaurante.setTaxaFrete(new BigDecimal(10));
+        restaurante.setCozinha(cozinhaEmUso);
+        restauranteRepository.save(restaurante);
 
         numeroCozinhas = (int) cozinhaRepository.count();
         cozinhaIdInexistente = numeroCozinhas+1;
