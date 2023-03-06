@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,6 +84,18 @@ public class RestauranteController {
         }
     }
 
+    @PutMapping("/{id}/ativo")
+    public ResponseEntity<Void>  ativar(@PathVariable Long id){
+        cadastroRestaurante.ativar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}/ativo")
+    public ResponseEntity<Void> inativar(@PathVariable Long id) {
+        cadastroRestaurante.inativar(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> dadosOrigem, HttpServletRequest request){
         Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(id);
@@ -95,12 +106,11 @@ public class RestauranteController {
 
         CozinhaIdInput cozinhaIdInput = new CozinhaIdInput();
         cozinhaIdInput.setId(restauranteAtual.getCozinha().getId());
-
+        
         RestauranteInput restauranteInput = new RestauranteInput();
         restauranteInput.setNome(restauranteAtual.getNome());
         restauranteInput.setTaxaFrete(restauranteAtual.getTaxaFrete());
-        restauranteInput.setCozinha(cozinhaIdInput)
-        ;
+        restauranteInput.setCozinha(cozinhaIdInput);
         return atualizar(id, restauranteInput);
     }
 
@@ -108,7 +118,7 @@ public class RestauranteController {
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
         validator.validate(restaurante, bindingResult);
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             throw new ValidacaoException(bindingResult);
         }
     }

@@ -43,6 +43,4 @@ public class CadastroCidadeService {
     public Cidade buscarOuFalhar(Long id){
         return cidadeRepository.findById(id).orElseThrow(() -> new CidadeNaoEncontradoException(id));
     }
-
-    //teste
 }
