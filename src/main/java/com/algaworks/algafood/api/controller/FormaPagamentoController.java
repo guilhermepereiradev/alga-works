@@ -17,7 +17,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/forma-pagamento")
+@RequestMapping("/formas-pagamento")
 public class FormaPagamentoController {
 
     @Autowired
