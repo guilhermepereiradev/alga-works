@@ -9,6 +9,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class CadastroUsuarioService {
 
@@ -21,6 +23,14 @@ public class CadastroUsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario){
+        repository.detach(usuario);
+
+        Optional<Usuario> usuarioExistente = repository.findByEmail(usuario.getEmail());
+
+        if(usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)){
+            throw new NegocioException(String.format("Já existe um usuário cadastrado com o email: %s", usuario.getEmail()));
+        }
+
         return repository.save(usuario);
     }
 
