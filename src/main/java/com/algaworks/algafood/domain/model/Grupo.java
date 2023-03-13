@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -22,5 +23,13 @@ public class Grupo {
     @ManyToMany
     @JoinTable(name = "grupo_permissao", joinColumns = @JoinColumn(name = "grupo_id"),
         inverseJoinColumns = @JoinColumn(name = "permissao_id"))
-    private List<Permissao> permissoes;
+    private Set<Permissao> permissoes = new HashSet<>();
+
+    public void adicionarPermissao(Permissao permissao){
+        getPermissoes().add(permissao);
+    }
+
+    public void removerPermissao(Permissao permissao){
+        getPermissoes().remove(permissao);
+    }
 }

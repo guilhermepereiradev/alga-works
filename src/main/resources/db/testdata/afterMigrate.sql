@@ -20,10 +20,13 @@ alter table cozinha auto_increment = 1;
 alter table estado auto_increment = 1;
 alter table forma_pagamento auto_increment = 1;
 alter table grupo auto_increment = 1;
+alter table grupo_permissao auto_increment = 1;
 alter table permissao auto_increment = 1;
 alter table produto auto_increment = 1;
 alter table restaurante auto_increment = 1;
+alter table restaurante_forma_pagamento auto_increment = 1;
 alter table usuario auto_increment = 1;
+alter table usuario_grupo auto_increment = 1;
 
 insert into cozinha (id, nome) values (1, 'Tailandesa');
 insert into cozinha (id, nome) values (2, 'Indiana');
@@ -78,3 +81,5 @@ insert into usuario (id, nome, email, senha, data_cadastro) values
                                                                 (2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp),
                                                                 (3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp),
                                                                 (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp);
+
+insert into grupo_permissao	(grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
