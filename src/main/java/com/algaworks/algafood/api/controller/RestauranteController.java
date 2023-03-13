@@ -96,6 +96,18 @@ public class RestauranteController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}/abertura")
+    public ResponseEntity<Void> abrir(@PathVariable Long id){
+        cadastroRestaurante.abrir(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/fechamento")
+    public ResponseEntity<Void> fechar(@PathVariable Long id){
+        cadastroRestaurante.fechar(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> dadosOrigem, HttpServletRequest request){
         Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(id);
