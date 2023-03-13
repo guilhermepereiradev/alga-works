@@ -7,7 +7,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -35,9 +37,17 @@ public class Usuario {
     @ManyToMany
     @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-    private List<Grupo> grupos = new ArrayList<>();
+    private Set<Grupo> grupos = new HashSet<>();
 
     public Boolean verificaSenhaIgualSenhaAtual(String senhaAtual){
         return getSenha().equals(senhaAtual);
+    }
+
+    public void adicionarGrupo(Grupo grupo){
+        getGrupos().add(grupo);
+    }
+
+    public void removerGrupo(Grupo grupo){
+        getGrupos().remove(grupo);
     }
 }
