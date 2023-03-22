@@ -98,7 +98,7 @@ public class RestauranteController {
     }
 
     @PutMapping("/ativacoes")
-    public ResponseEntity<Void> ativarMultiplis(@RequestBody List<Long> restauranteIds){
+    public ResponseEntity<Void> ativarMultiplos(@RequestBody List<Long> restauranteIds){
         try {
             cadastroRestaurante.ativar(restauranteIds);
             return ResponseEntity.ok().build();
@@ -108,7 +108,7 @@ public class RestauranteController {
     }
 
     @DeleteMapping("/ativacoes")
-    public ResponseEntity<Void> inativarMultiplis(@RequestBody List<Long> restauranteIds){
+    public ResponseEntity<Void> inativarMultiplos(@RequestBody List<Long> restauranteIds){
         try {
             cadastroRestaurante.inativar(restauranteIds);
             return ResponseEntity.ok().build();

@@ -22,8 +22,6 @@ public class Pedido {
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
     private BigDecimal valorTotal;
-    private StatusPedido status;
-
     @Embedded
     private Endereco enderecoEntrega;
 
@@ -32,7 +30,9 @@ public class Pedido {
     private OffsetDateTime dataConfirmacao;
     private OffsetDateTime dataCancelamento;
     private OffsetDateTime dataEntrega;
-    private StatusPedido statusPedido;
+
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status;
 
     @ManyToOne
     @JoinColumn(name = "usuario_cliente_id", nullable = false)
@@ -42,7 +42,7 @@ public class Pedido {
     @JoinColumn(nullable = false)
     private Restaurante restaurante;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FormaPagamento formaPagamento;
 
