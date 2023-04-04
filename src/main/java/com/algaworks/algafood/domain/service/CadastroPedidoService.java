@@ -21,4 +21,8 @@ public class CadastroPedidoService {
     public Pedido buscarOuFalhar(Long id){
         return repository.findById(id).orElseThrow(() -> new PedidoNaoEncontradoException(id));
     }
+
+    public Pedido salvar(Pedido pedido) {
+       return repository.save(pedido);
+    }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 public class Pedido {
 
     @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
@@ -24,7 +25,6 @@ public class Pedido {
     private BigDecimal valorTotal;
     @Embedded
     private Endereco enderecoEntrega;
-
     @CreationTimestamp
     private OffsetDateTime dataCriacao;
     private OffsetDateTime dataConfirmacao;
@@ -32,7 +32,7 @@ public class Pedido {
     private OffsetDateTime dataEntrega;
 
     @Enumerated(EnumType.STRING)
-    private StatusPedido status;
+    private StatusPedido status = StatusPedido.CRIADO;
 
     @ManyToOne
     @JoinColumn(name = "usuario_cliente_id", nullable = false)
@@ -46,6 +46,14 @@ public class Pedido {
     @JoinColumn(nullable = false)
     private FormaPagamento formaPagamento;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedido> itens = new ArrayList<>();
+
+    public void calcularValorTotal(){
+        getItens().forEach(ItemPedido::calcularPrecoTotal);
+
+        this.subtotal = getItens().stream().map(ItemPedido::getPrecoTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        valorTotal = subtotal.add(taxaFrete);
+    }
 }

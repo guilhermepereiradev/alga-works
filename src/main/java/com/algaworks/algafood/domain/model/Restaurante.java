@@ -108,4 +108,8 @@ public class Restaurante {
     public void removerUsuarioResponsavel(Usuario usuario){
         getUsuariosResponsaveis().remove(usuario);
     }
+
+    public boolean aceitaFormaPagamento(FormaPagamento formaPagamento){
+        return getFormasPagamento().contains(formaPagamento);
+    }
 }
