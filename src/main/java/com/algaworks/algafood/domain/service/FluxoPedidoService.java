@@ -1,0 +1,56 @@
+package com.algaworks.algafood.domain.service;
+
+import com.algaworks.algafood.domain.exception.NegocioException;
+import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.model.StatusPedido;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.OffsetDateTime;
+
+@Service
+public class FluxoPedidoService {
+
+    @Autowired
+    private CadastroPedidoService cadastroPedidoService;
+
+    @Transactional
+    public void confirmar(Long id){
+        Pedido pedido = cadastroPedidoService.buscarOuFalhar(id);
+
+        if (pedido.getStatus() != StatusPedido.CRIADO){
+            throw new NegocioException(String.format("Status do pedido %d não pode ser alterado de %s para %s",
+                    pedido.getId(), pedido.getStatus().getDescricao(), StatusPedido.CONFIRMADO.getDescricao()));
+        }
+
+        pedido.setStatus(StatusPedido.CONFIRMADO);
+        pedido.setDataConfirmacao(OffsetDateTime.now());
+    }
+
+    @Transactional
+    public void entregar(Long id){
+        Pedido pedido = cadastroPedidoService.buscarOuFalhar(id);
+
+        if (pedido.getStatus() != StatusPedido.CONFIRMADO){
+            throw new NegocioException(String.format("Status do pedido %d não pode ser alterado de %s para %s",
+                    pedido.getId(), pedido.getStatus().getDescricao(), StatusPedido.ENTREGUE.getDescricao()));
+        }
+
+        pedido.setStatus(StatusPedido.ENTREGUE);
+        pedido.setDataEntrega(OffsetDateTime.now());
+    }
+
+    @Transactional
+    public void cancelar(Long id){
+        Pedido pedido = cadastroPedidoService.buscarOuFalhar(id);
+
+        if (pedido.getStatus() != StatusPedido.CRIADO){
+            throw new NegocioException(String.format("Status do pedido %d não pode ser alterado de %s para %s",
+                    pedido.getId(), pedido.getStatus().getDescricao(), StatusPedido.CANCELADO.getDescricao()));
+        }
+
+        pedido.setStatus(StatusPedido.CANCELADO);
+        pedido.setDataCancelamento(OffsetDateTime.now());
+    }
+}

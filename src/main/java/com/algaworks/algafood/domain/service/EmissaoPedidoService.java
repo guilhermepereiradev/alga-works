@@ -25,7 +25,6 @@ public class EmissaoPedidoService {
     private CadastroCidadeService cidadeService;
 
     @Transactional
-
     public Pedido emitirPedido(Pedido pedido) {
         validarPedido(pedido);
         validarItens(pedido);
