@@ -47,9 +47,9 @@ public class PedidoController {
         return ResponseEntity.ok().body(pedidoResumoModelAssembler.toCollectionModel(pedidoService.listar()));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PedidoModel> buscar(@PathVariable Long id){
-        return ResponseEntity.ok().body(pedidoModelAssembler.toModel(pedidoService.buscarOuFalhar(id)));
+    @GetMapping("/{codigo}")
+    public ResponseEntity<PedidoModel> buscar(@PathVariable String codigo){
+        return ResponseEntity.ok().body(pedidoModelAssembler.toModel(pedidoService.buscarOuFalhar(codigo)));
     }
 
     @PostMapping
