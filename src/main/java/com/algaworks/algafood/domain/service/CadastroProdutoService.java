@@ -29,6 +29,10 @@ public class CadastroProdutoService {
         return repository.findByRestaurante(restauranteService.buscarOuFalhar(restauranteId));
     }
 
+    public List<Produto> buscarAtivosPeloRestaurante(Long restauranteId){
+        return repository.findAtivosByRestaurante(restauranteService.buscarOuFalhar(restauranteId));
+    }
+
     @Transactional
     public Produto salvar(Produto produto) {
         return repository.save(produto);

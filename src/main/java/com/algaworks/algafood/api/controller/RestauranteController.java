@@ -5,6 +5,7 @@ import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.CozinhaIdInput;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
+import com.algaworks.algafood.api.model.view.RestauranteView;
 import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -12,6 +13,7 @@ import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -36,9 +39,6 @@ import java.util.Map;
 public class RestauranteController {
 
     @Autowired
-    private RestauranteRepository restauranteRepository;
-
-    @Autowired
     private CadastroRestauranteService cadastroRestaurante;
 
     @Autowired
@@ -50,10 +50,22 @@ public class RestauranteController {
     @Autowired
     private RestauranteInputDisassembler restauranteInputDisassembler;
 
-
     @GetMapping
-    public ResponseEntity<List<RestauranteModel>> listar(){
-        return ResponseEntity.ok().body(restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll()));
+    public ResponseEntity<MappingJacksonValue> listar(@RequestParam(required = false) String projecao){
+        List<Restaurante> restauranteList = cadastroRestaurante.listar();
+        List<RestauranteModel> restauranteModelList = restauranteModelAssembler.toCollectionModel(restauranteList);
+
+        MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restauranteModelList);
+
+        restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
+
+        if ("apenas-nome".equals(projecao)){
+            restaurantesWrapper.setSerializationView(RestauranteView.ApenasNome.class);
+        } else if ("completo".equals(projecao)) {
+            restaurantesWrapper.setSerializationView(null);
+        }
+
+        return ResponseEntity.ok().body(restaurantesWrapper);
     }
 
     @GetMapping("/{id}")

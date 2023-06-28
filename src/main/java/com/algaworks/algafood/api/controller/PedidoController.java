@@ -12,10 +12,13 @@ import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.service.CadastroPedidoService;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,8 +46,20 @@ public class PedidoController {
     private CadastroUsuarioService cadastroUsuarioService;
 
     @GetMapping
-    public ResponseEntity<List<PedidoResumoModel>> listar(){
-        return ResponseEntity.ok().body(pedidoResumoModelAssembler.toCollectionModel(pedidoService.listar()));
+    public ResponseEntity<MappingJacksonValue> listar(@RequestParam(required = false) String... campos){
+        List<PedidoResumoModel> pedidoResumoModelList = pedidoResumoModelAssembler.toCollectionModel(pedidoService.listar());
+        MappingJacksonValue pedidoWrapper = new MappingJacksonValue(pedidoResumoModelList);
+
+        var simpleFilterProvider = new SimpleFilterProvider();
+        simpleFilterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
+
+        if(campos != null){
+            simpleFilterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos));
+        }
+
+        pedidoWrapper.setFilters(simpleFilterProvider);
+
+        return ResponseEntity.ok().body(pedidoWrapper);
     }
 
     @GetMapping("/{codigo}")

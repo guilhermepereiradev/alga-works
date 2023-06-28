@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
+import com.algaworks.algafood.api.model.view.RestauranteView;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.*;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
@@ -106,5 +107,9 @@ public class CadastroRestauranteService {
         Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
 
         restaurante.removerUsuarioResponsavel(usuario);
+    }
+
+    public List<Restaurante> listar(){
+        return restauranteRepository.findAll();
     }
 }
