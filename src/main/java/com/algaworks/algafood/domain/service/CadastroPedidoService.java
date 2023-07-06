@@ -4,6 +4,8 @@ import com.algaworks.algafood.domain.exception.PedidoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +21,8 @@ public class CadastroPedidoService {
         return repository.findAll();
     }
 
-    public List<Pedido> listar(Specification<Pedido> specification){
-        return repository.findAll(specification);
+    public Page<Pedido> listar(Specification<Pedido> specification, Pageable pageable){
+        return repository.findAll(specification, pageable);
     }
 
     public Pedido buscarOuFalhar(String codigo){

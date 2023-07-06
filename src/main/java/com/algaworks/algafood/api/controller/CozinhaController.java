@@ -9,6 +9,10 @@ import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,9 +25,6 @@ import java.util.List;
 public class CozinhaController {
 
     @Autowired
-    private CozinhaRepository cozinhaRepository;
-
-    @Autowired
     private CadastroCozinhaService cadastroCozinha;
 
     @Autowired
@@ -33,8 +34,11 @@ public class CozinhaController {
     private CozinhaInputDisassembler cozinhaInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<CozinhaModel>> listar() {
-        return ResponseEntity.ok().body(cozinhaAssembler.toCollectionModel(cozinhaRepository.findAll()));
+    public ResponseEntity<Page<CozinhaModel>> listar(@PageableDefault(size = 2) Pageable pageable) {
+        Page<Cozinha> cozinhasPage = cadastroCozinha.listar(pageable);
+        List<CozinhaModel> cozinhasModel = cozinhaAssembler.toCollectionModel(cozinhasPage.getContent());
+        Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
+        return ResponseEntity.ok().body(cozinhasModelPage);
     }
 
     @GetMapping("/{id}")

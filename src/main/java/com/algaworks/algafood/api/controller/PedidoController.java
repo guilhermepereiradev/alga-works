@@ -17,6 +17,10 @@ import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,18 +70,21 @@ public class PedidoController {
 //    }
 
     @GetMapping
-    public ResponseEntity<List<PedidoResumoModel>> listar(PedidoFilterInput pedidoFilterInput) {
-        List<Pedido> pedidos = pedidoService.listar(PedidoSpecs.usandoFiltro(pedidoFilterInputDisassembler.toDomainObject(pedidoFilterInput)));
-        List<PedidoResumoModel> pedidoResumoModelList = pedidoResumoModelAssembler.toCollectionModel(pedidos);
+    public ResponseEntity<Page<PedidoResumoModel>> listar(Pageable pageable, PedidoFilterInput pedidoFilterInput) {
+        Specification<Pedido> pedidoSpec = PedidoSpecs.usandoFiltro(pedidoFilterInputDisassembler.toDomainObject(pedidoFilterInput));
 
+        Page<Pedido> pedidosPage = pedidoService.listar(pedidoSpec, pageable);
 
-        return ResponseEntity.ok().body(pedidoResumoModelList);
+        List<PedidoResumoModel> pedidoResumoModelList = pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
+
+        Page<PedidoResumoModel> pedidoResumoModelPage = new PageImpl<>(pedidoResumoModelList, pageable, pedidosPage.getTotalElements());
+
+        return ResponseEntity.ok(pedidoResumoModelPage);
     }
-
 
     @GetMapping("/{codigo}")
     public ResponseEntity<PedidoModel> buscar(@PathVariable String codigo){
-        return ResponseEntity.ok().body(pedidoModelAssembler.toModel(pedidoService.buscarOuFalhar(codigo)));
+        return ResponseEntity.ok(pedidoModelAssembler.toModel(pedidoService.buscarOuFalhar(codigo)));
     }
 
     @PostMapping
