@@ -8,6 +8,7 @@ import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoFilterInput;
 import com.algaworks.algafood.api.model.input.PedidoInput;
+import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Pedido;
@@ -26,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -71,6 +73,8 @@ public class PedidoController {
 
     @GetMapping
     public ResponseEntity<Page<PedidoResumoModel>> listar(Pageable pageable, PedidoFilterInput pedidoFilterInput) {
+        pageable = traduzirPageable(pageable);
+
         Specification<Pedido> pedidoSpec = PedidoSpecs.usandoFiltro(pedidoFilterInputDisassembler.toDomainObject(pedidoFilterInput));
 
         Page<Pedido> pedidosPage = pedidoService.listar(pedidoSpec, pageable);
@@ -99,5 +103,21 @@ public class PedidoController {
             throw new NegocioException(e.getMessage(), e);
         }
 
+    }
+
+    private Pageable traduzirPageable(Pageable apiPageable){
+        var mapeamento = Map.of(
+                "codigo", "codigo",
+                "subTotal", "subTotal",
+                "taxaFrete", "taxaFrete",
+                "valorTotal", "valorTotal",
+                "dataCriacao", "dataCriacao",
+                "restaurante.nome", "restaurante.nome",
+                "restaurante.id", "restaurante.id",
+                "cliente.nome", "cliente.nome",
+                "cliente.email", "cliente.email",
+                "cliente.id", "cliente.id"
+        );
+        return PageableTranslator.pageableTranslator(apiPageable, mapeamento);
     }
 }
