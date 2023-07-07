@@ -57,3 +57,5 @@ build/
 ### VS Code ###
 .vscode/
 >>>>>>> a22ad7d (first commit)
+
+.metadata
