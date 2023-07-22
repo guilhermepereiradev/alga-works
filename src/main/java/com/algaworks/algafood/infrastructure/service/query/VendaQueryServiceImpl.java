@@ -1,4 +1,4 @@
-package com.algaworks.algafood.infrastructure.service;
+package com.algaworks.algafood.infrastructure.service.query;
 
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.StatusPedido;
@@ -10,9 +10,9 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,10 +29,10 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 
         var predicates = new ArrayList<>();
 
-        var functionConvertTzDataCriacao = builder.function("convert_tz", LocalDate.class, root.get("dataCriacao"),
+        var functionConvertTzDataCriacao = builder.function("convert_tz", Date.class, root.get("dataCriacao"),
                 builder.literal("+00:00"), builder.literal(timeOffset));
 
-        var functionDateDataCriacao = builder.function("date", LocalDate.class, functionConvertTzDataCriacao);
+        var functionDateDataCriacao = builder.function("date", Date.class, functionConvertTzDataCriacao);
 
         var selection = builder.construct(VendaDiaria.class, //
                 functionDateDataCriacao, //
