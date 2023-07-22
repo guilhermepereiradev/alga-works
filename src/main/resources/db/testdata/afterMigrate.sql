@@ -30,6 +30,8 @@ delete
 from pedido;
 delete
 from item_pedido;
+delete
+from foto_produto;
 
 set foreign_key_checks = 1;
 
@@ -39,19 +41,31 @@ alter table cozinha
     auto_increment = 1;
 alter table estado
     auto_increment = 1;
-alter table forma_pagamento auto_increment = 1;
-alter table grupo auto_increment = 1;
-alter table permissao auto_increment = 1;
-alter table produto auto_increment = 1;
-alter table restaurante auto_increment = 1;
-alter table usuario auto_increment = 1;
-alter table pedido auto_increment = 1;
-alter table item_pedido auto_increment = 1;
+alter table forma_pagamento
+    auto_increment = 1;
+alter table grupo
+    auto_increment = 1;
+alter table permissao
+    auto_increment = 1;
+alter table produto
+    auto_increment = 1;
+alter table restaurante
+    auto_increment = 1;
+alter table usuario
+    auto_increment = 1;
+alter table pedido
+    auto_increment = 1;
+alter table item_pedido
+    auto_increment = 1;
 
-insert into cozinha (id, nome) values (1, 'Tailandesa');
-insert into cozinha (id, nome) values (2, 'Indiana');
-insert into cozinha (id, nome) values (3, 'Argentina');
-insert into cozinha (id, nome) values (4, 'Brasileira');
+insert into cozinha (id, nome)
+values (1, 'Tailandesa');
+insert into cozinha (id, nome)
+values (2, 'Indiana');
+insert into cozinha (id, nome)
+values (3, 'Argentina');
+insert into cozinha (id, nome)
+values (4, 'Brasileira');
 
 insert into estado (id, nome)
 values (1, 'Minas Gerais');
