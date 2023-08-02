@@ -24,7 +24,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 //    @Autowired
 //    private RestauranteRepository restauranteRepository;
 
-    public List<Restaurante> find(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal){
+    public List<Restaurante> find(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
 
         CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
@@ -32,15 +32,15 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
         var predicates = new ArrayList<Predicate>();
 
-        if(StringUtils.hasLength(nome)){
-            predicates.add(builder.like(root.get("nome"), "%"+nome+"%"));
+        if (StringUtils.hasLength(nome)) {
+            predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
         }
 
-        if (taxaInicial != null){
+        if (taxaInicial != null) {
             predicates.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaInicial));
         }
 
-        if (taxaFinal != null){
+        if (taxaFinal != null) {
             predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFinal));
         }
 

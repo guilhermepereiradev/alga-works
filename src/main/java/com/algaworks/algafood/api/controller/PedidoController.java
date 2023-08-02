@@ -87,25 +87,25 @@ public class PedidoController {
     }
 
     @GetMapping("/{codigo}")
-    public ResponseEntity<PedidoModel> buscar(@PathVariable String codigo){
+    public ResponseEntity<PedidoModel> buscar(@PathVariable String codigo) {
         return ResponseEntity.ok(pedidoModelAssembler.toModel(pedidoService.buscarOuFalhar(codigo)));
     }
 
     @PostMapping
-    public ResponseEntity<PedidoModel> emitir(@RequestBody @Valid PedidoInput pedidoInput){
+    public ResponseEntity<PedidoModel> emitir(@RequestBody @Valid PedidoInput pedidoInput) {
         Pedido pedido = pedidoInputDisassembler.toDomainModel(pedidoInput);
         pedido.setCliente(cadastroUsuarioService.buscarOuFalhar(1L)); // usuário fixo até implementar autenticação
 
-        try{
+        try {
             PedidoModel pedidoModel = pedidoModelAssembler.toModel(emissaoPedidoService.emitirPedido(pedido));
             return ResponseEntity.status(HttpStatus.CREATED).body(pedidoModel);
-        } catch (EntidadeNaoEncontradaException e){
+        } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
 
     }
 
-    private Pageable traduzirPageable(Pageable apiPageable){
+    private Pageable traduzirPageable(Pageable apiPageable) {
         var mapeamento = Map.of(
                 "codigo", "codigo",
                 "subTotal", "subTotal",

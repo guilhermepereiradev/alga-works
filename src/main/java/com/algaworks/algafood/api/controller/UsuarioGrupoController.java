@@ -22,19 +22,19 @@ public class UsuarioGrupoController {
     private GrupoModelAssembler grupoModelAssembler;
 
     @GetMapping
-    public ResponseEntity<List<GrupoModel>> listar(@PathVariable Long usuarioId){
+    public ResponseEntity<List<GrupoModel>> listar(@PathVariable Long usuarioId) {
         Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
         return ResponseEntity.ok().body(grupoModelAssembler.toCollectionModels(usuario.getGrupos()));
     }
 
     @PutMapping("/{grupoId}")
-    public ResponseEntity<Void> associar(@PathVariable Long usuarioId, @PathVariable Long grupoId){
+    public ResponseEntity<Void> associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
         usuarioService.associarGrupo(usuarioId, grupoId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{grupoId}")
-    public ResponseEntity<Void> desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId){
+    public ResponseEntity<Void> desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
         usuarioService.desassociarGrupo(usuarioId, grupoId);
         return ResponseEntity.noContent().build();
     }

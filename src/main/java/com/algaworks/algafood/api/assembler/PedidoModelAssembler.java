@@ -16,11 +16,11 @@ public class PedidoModelAssembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public PedidoModel toModel(Pedido pedido){
+    public PedidoModel toModel(Pedido pedido) {
         return modelMapper.map(pedido, PedidoModel.class);
     }
 
-    public List<PedidoModel> toCollectionModel(Collection<Pedido> pedidos){
+    public List<PedidoModel> toCollectionModel(Collection<Pedido> pedidos) {
         return pedidos.stream().map(this::toModel).collect(Collectors.toList());
     }
 }

@@ -75,13 +75,13 @@ public class Restaurante {
     @JoinTable(name = "restaurante_usuario_responsavel",
             joinColumns = @JoinColumn(name = "restaurante_id"),
             inverseJoinColumns = @JoinColumn(name = "usuario_id"))
-    private Set<Usuario> usuariosResponsaveis= new HashSet<>();
+    private Set<Usuario> usuariosResponsaveis = new HashSet<>();
 
-    public void ativar(){
+    public void ativar() {
         setAtivo(true);
     }
 
-    public void inativar(){
+    public void inativar() {
         setAtivo(false);
     }
 
@@ -93,23 +93,23 @@ public class Restaurante {
         getFormasPagamento().add(formaPagamento);
     }
 
-    public void abrir(){
+    public void abrir() {
         setAberto(true);
     }
 
-    public void fechar(){
+    public void fechar() {
         setAberto(false);
     }
 
-    public void adicionarUsuarioResponsavel(Usuario usuario){
+    public void adicionarUsuarioResponsavel(Usuario usuario) {
         getUsuariosResponsaveis().add(usuario);
     }
 
-    public void removerUsuarioResponsavel(Usuario usuario){
+    public void removerUsuarioResponsavel(Usuario usuario) {
         getUsuariosResponsaveis().remove(usuario);
     }
 
-    public boolean aceitaFormaPagamento(FormaPagamento formaPagamento){
+    public boolean aceitaFormaPagamento(FormaPagamento formaPagamento) {
         return getFormasPagamento().contains(formaPagamento);
     }
 }

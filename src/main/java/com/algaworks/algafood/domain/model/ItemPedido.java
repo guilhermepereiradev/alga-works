@@ -29,15 +29,15 @@ public class ItemPedido {
     @JoinColumn(nullable = false)
     private Pedido pedido;
 
-    public void calcularPrecoTotal(){
+    public void calcularPrecoTotal() {
         BigDecimal precoUnitario = getPrecoUnitario();
         Integer quantidade = getQuantidade();
 
-        if(precoUnitario == null){
+        if (precoUnitario == null) {
             precoUnitario = BigDecimal.ZERO;
         }
 
-        if(quantidade == null){
+        if (quantidade == null) {
             quantidade = 0;
         }
 

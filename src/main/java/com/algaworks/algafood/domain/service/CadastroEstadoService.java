@@ -17,25 +17,25 @@ public class CadastroEstadoService {
     private EstadoRepository estadoRepository;
 
     @Transactional
-    public Estado salvar(Estado estado){
+    public Estado salvar(Estado estado) {
         return estadoRepository.save(estado);
     }
 
     @Transactional
-    public void remover(Long id){
-        try{
+    public void remover(Long id) {
+        try {
             estadoRepository.deleteById(id);
             estadoRepository.flush();
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new EstadoNaoEncontradoException(id);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     String.format(MSG_ESTADO_EM_USO, id)
             );
         }
     }
 
-    public Estado buscarOuFalhar(Long id){
+    public Estado buscarOuFalhar(Long id) {
         return estadoRepository.findById(id).orElseThrow(() -> new EstadoNaoEncontradoException(id));
     }
 }

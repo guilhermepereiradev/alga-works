@@ -32,23 +32,23 @@ public class GrupoController {
     private GrupoInputDisassempler grupoInputDisassempler;
 
     @GetMapping
-    public ResponseEntity<List<GrupoModel>> listar(){
+    public ResponseEntity<List<GrupoModel>> listar() {
         return ResponseEntity.ok().body(grupoModelAssembler.toCollectionModels(grupoRepository.findAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GrupoModel> buscar(@PathVariable Long id){
+    public ResponseEntity<GrupoModel> buscar(@PathVariable Long id) {
         return ResponseEntity.ok().body(grupoModelAssembler.toModel(grupoService.buscarOuFalhar(id)));
     }
 
     @PostMapping
-    public ResponseEntity<GrupoModel> salvar(@RequestBody @Valid GrupoInput grupoInput){
+    public ResponseEntity<GrupoModel> salvar(@RequestBody @Valid GrupoInput grupoInput) {
         Grupo grupo = grupoService.salvar(grupoInputDisassempler.toDomainModel(grupoInput));
         return ResponseEntity.status(HttpStatus.CREATED).body(grupoModelAssembler.toModel(grupo));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GrupoModel> atualizar(@PathVariable Long id, @RequestBody @Valid GrupoInput grupoInput){
+    public ResponseEntity<GrupoModel> atualizar(@PathVariable Long id, @RequestBody @Valid GrupoInput grupoInput) {
         Grupo grupo = grupoService.buscarOuFalhar(id);
 
         grupoInputDisassempler.copyToDomainObject(grupoInput, grupo);
@@ -57,7 +57,7 @@ public class GrupoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         grupoService.deletar(id);
         return ResponseEntity.noContent().build();
     }

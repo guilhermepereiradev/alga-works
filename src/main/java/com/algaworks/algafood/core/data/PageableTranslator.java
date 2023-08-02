@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PageableTranslator {
-    public static Pageable pageableTranslator(Pageable pageable, Map<String, String> fieldsMapping){
+    public static Pageable pageableTranslator(Pageable pageable, Map<String, String> fieldsMapping) {
         var orders = pageable.getSort().stream()
                 .filter(order -> fieldsMapping.containsKey(order.getProperty()))
                 .map(order -> new Sort.Order(order.getDirection(), fieldsMapping.get(order.getProperty())))

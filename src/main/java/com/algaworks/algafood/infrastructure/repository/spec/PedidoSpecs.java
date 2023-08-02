@@ -12,26 +12,26 @@ public class PedidoSpecs {
     public static Specification<Pedido> usandoFiltro(PedidoFilter filtro) {
 
         return (root, query, criteriaBuilder) -> {
-            if(root instanceof PedidoFilter){
+            if (root instanceof PedidoFilter) {
                 root.fetch("restaurante").fetch("cozinha");
                 root.fetch("cliente");
             }
 
             var predicates = new ArrayList<>();
 
-            if(filtro.getClienteId() != null){
+            if (filtro.getClienteId() != null) {
                 predicates.add(criteriaBuilder.equal(root.get("cliente").get("id"), filtro.getClienteId()));
             }
 
-            if(filtro.getRestauranteId() != null){
+            if (filtro.getRestauranteId() != null) {
                 predicates.add(criteriaBuilder.equal(root.get("restaurante").get("id"), filtro.getRestauranteId()));
             }
 
-            if(filtro.getDataCriacaoInicio() != null){
+            if (filtro.getDataCriacaoInicio() != null) {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dataCriacao"), filtro.getDataCriacaoInicio()));
             }
 
-            if(filtro.getDataCriacaoFim() != null){
+            if (filtro.getDataCriacaoFim() != null) {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dataCriacao"), filtro.getDataCriacaoFim()));
             }
 

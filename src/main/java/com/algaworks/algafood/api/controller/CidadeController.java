@@ -34,39 +34,39 @@ public class CidadeController {
     private CidadeInputDisassembler cidadeDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<CidadeModel>> listar(){
+    public ResponseEntity<List<CidadeModel>> listar() {
         return ResponseEntity.ok().body(cidadeAssembler.toCollectionModel(cidadeRepository.findAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CidadeModel> buscar(@PathVariable Long id){
+    public ResponseEntity<CidadeModel> buscar(@PathVariable Long id) {
         return ResponseEntity.ok().body(cidadeAssembler.toModel(cadastroCidade.buscarOuFalhar(id)));
     }
 
     @PostMapping()
-    public ResponseEntity<CidadeModel> salvar(@RequestBody @Valid CidadeInput cidadeInput){
+    public ResponseEntity<CidadeModel> salvar(@RequestBody @Valid CidadeInput cidadeInput) {
         try {
             Cidade cidade = cadastroCidade.salvar(cidadeDisassembler.toDomainObject(cidadeInput));
             return ResponseEntity.status(HttpStatus.CREATED).body(cidadeAssembler.toModel(cidade));
-        }catch (EstadoNaoEncontradoException e){
+        } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e.getCause());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CidadeModel> atualizar(@RequestBody @Valid CidadeInput cidadeInput, @PathVariable Long id){
-        try{
+    public ResponseEntity<CidadeModel> atualizar(@RequestBody @Valid CidadeInput cidadeInput, @PathVariable Long id) {
+        try {
             Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(id);
             cidadeDisassembler.copyToDomainObject(cidadeInput, cidadeAtual);
 
             return ResponseEntity.ok().body(cidadeAssembler.toModel(cadastroCidade.salvar(cidadeAtual)));
-        }catch (EstadoNaoEncontradoException e){
+        } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e.getCause());
         }
     }
 
     @DeleteMapping("/{id}")
-    public void remover(@PathVariable Long id){
+    public void remover(@PathVariable Long id) {
         cadastroCidade.remover(id);
     }
 }

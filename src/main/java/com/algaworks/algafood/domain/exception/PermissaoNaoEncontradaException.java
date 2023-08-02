@@ -5,7 +5,7 @@ public class PermissaoNaoEncontradaException extends EntidadeNaoEncontradaExcept
         super(mensagem);
     }
 
-    public PermissaoNaoEncontradaException(Long id){
+    public PermissaoNaoEncontradaException(Long id) {
         this(String.format("Permissão não encontrada para o código %d", id));
     }
 }

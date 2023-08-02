@@ -24,7 +24,7 @@ public class FluxoPedidoService {
     }
 
     @Transactional
-    public void entregar(String codigo){
+    public void entregar(String codigo) {
         Pedido pedido = cadastroPedidoService.buscarOuFalhar(codigo);
         pedido.entregar();
     }

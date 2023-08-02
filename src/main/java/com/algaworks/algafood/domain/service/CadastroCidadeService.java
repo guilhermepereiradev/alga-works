@@ -29,18 +29,18 @@ public class CadastroCidadeService {
     }
 
     @Transactional
-    public void remover(Long id){
+    public void remover(Long id) {
         try {
             cidadeRepository.deleteById(id);
             cidadeRepository.flush();
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format("Cidade de código %d não pode ser removida por estar em uso", id));
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new CidadeNaoEncontradoException(id);
         }
     }
 
-    public Cidade buscarOuFalhar(Long id){
+    public Cidade buscarOuFalhar(Long id) {
         return cidadeRepository.findById(id).orElseThrow(() -> new CidadeNaoEncontradoException(id));
     }
 }

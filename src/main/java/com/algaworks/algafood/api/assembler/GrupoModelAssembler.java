@@ -16,11 +16,11 @@ public class GrupoModelAssembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public GrupoModel toModel(Grupo grupo){
+    public GrupoModel toModel(Grupo grupo) {
         return modelMapper.map(grupo, GrupoModel.class);
     }
 
-    public List<GrupoModel> toCollectionModels(Collection<Grupo> grupos){
+    public List<GrupoModel> toCollectionModels(Collection<Grupo> grupos) {
         return grupos.stream().map(this::toModel).collect(Collectors.toList());
     }
 }

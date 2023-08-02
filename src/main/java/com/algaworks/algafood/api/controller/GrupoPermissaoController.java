@@ -21,19 +21,19 @@ public class GrupoPermissaoController {
     private PermissaoAssembler permissaoAssembler;
 
     @GetMapping
-    public ResponseEntity<List<PermissaoModel>> listar(@PathVariable Long grupoId){
+    public ResponseEntity<List<PermissaoModel>> listar(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
         return ResponseEntity.ok().body(permissaoAssembler.toCollectionModel(grupo.getPermissoes()));
     }
 
     @PutMapping("/{permissaoId}")
-    public ResponseEntity<Void> associar(@PathVariable Long grupoId, @PathVariable Long permissaoId){
+    public ResponseEntity<Void> associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         grupoService.associarPermissao(grupoId, permissaoId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{permissaoId}")
-    public ResponseEntity<Void> desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId){
+    public ResponseEntity<Void> desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         grupoService.desassociarPermissao(grupoId, permissaoId);
         return ResponseEntity.noContent().build();
     }

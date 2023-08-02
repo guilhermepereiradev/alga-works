@@ -34,23 +34,23 @@ public class UsuarioController {
     private UsuarioInputDisassembler usuarioInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<UsuarioModel>> listar(){
+    public ResponseEntity<List<UsuarioModel>> listar() {
         return ResponseEntity.ok().body(usuarioModelAssembler.toCollectionModel(usuarioRepository.findAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioModel> buscar(@PathVariable Long id){
+    public ResponseEntity<UsuarioModel> buscar(@PathVariable Long id) {
         return ResponseEntity.ok().body(usuarioModelAssembler.toModel(usuarioService.buscarOuFalhar(id)));
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioModel> salvar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput){
+    public ResponseEntity<UsuarioModel> salvar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
         Usuario usuario = usuarioService.salvar(usuarioInputDisassembler.toDomainModel(usuarioInput));
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioModelAssembler.toModel(usuario));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioModel> atualizar(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id){
+    public ResponseEntity<UsuarioModel> atualizar(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id) {
         Usuario usuario = usuarioService.buscarOuFalhar(id);
         usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuario);
 
@@ -58,13 +58,13 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         usuarioService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/senha")
-    public ResponseEntity<Void> alterarSenha(@RequestBody @Valid SenhaInput senhaInput, @PathVariable Long id){
+    public ResponseEntity<Void> alterarSenha(@RequestBody @Valid SenhaInput senhaInput, @PathVariable Long id) {
         usuarioService.alterarSenha(id, senhaInput.getSenhaAtual(), senhaInput.getNovaSenha());
         return ResponseEntity.noContent().build();
     }

@@ -12,11 +12,11 @@ public class UsuarioInputDisassembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Usuario toDomainModel(UsuarioInput usuarioInput){
+    public Usuario toDomainModel(UsuarioInput usuarioInput) {
         return modelMapper.map(usuarioInput, Usuario.class);
     }
 
-    public void copyToDomainObject(UsuarioInput usuarioInput, Usuario usuario){
+    public void copyToDomainObject(UsuarioInput usuarioInput, Usuario usuario) {
         modelMapper.map(usuarioInput, usuario);
     }
 }

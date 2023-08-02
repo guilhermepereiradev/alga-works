@@ -18,30 +18,30 @@ public class CadastroCozinhaService {
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
-    public Page<Cozinha> listar(Pageable pageable){
+    public Page<Cozinha> listar(Pageable pageable) {
         return cozinhaRepository.findAll(pageable);
     }
 
     @Transactional
-    public Cozinha salvar(Cozinha cozinha){
+    public Cozinha salvar(Cozinha cozinha) {
         return cozinhaRepository.save(cozinha);
     }
 
     @Transactional
-    public void remover(Long id){
+    public void remover(Long id) {
         try {
             cozinhaRepository.deleteById(id);
             cozinhaRepository.flush();
-         } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new CozinhaNaoEncontradoException(id);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     String.format("Cozinha de código %d não pode ser removida por estar em uso", id)
             );
         }
     }
 
-    public Cozinha buscarOuFalhar(Long id){
+    public Cozinha buscarOuFalhar(Long id) {
         return cozinhaRepository.findById(id).orElseThrow(() -> new CozinhaNaoEncontradoException(id));
     }
 }

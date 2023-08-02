@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class MultiploValidator implements ConstraintValidator<Multiplo, Number> {
 
     private int numeroMultiplo;
+
     @Override
     public void initialize(Multiplo constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);

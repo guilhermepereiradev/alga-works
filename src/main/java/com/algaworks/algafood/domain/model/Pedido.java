@@ -55,7 +55,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedido> itens = new ArrayList<>();
 
-    public void calcularValorTotal(){
+    public void calcularValorTotal() {
         getItens().forEach(ItemPedido::calcularPrecoTotal);
 
         subtotal = getItens().stream().map(ItemPedido::getPrecoTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -70,7 +70,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
         registerEvent(new PedidoConfirmadoEvent(this));
     }
 
-    public void entregar(){
+    public void entregar() {
         setStatus(StatusPedido.ENTREGUE);
         setDataEntrega(OffsetDateTime.now());
     }
@@ -82,8 +82,8 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
         registerEvent(new PedidoCanceladoEvent(this));
     }
 
-    private void setStatus(StatusPedido novoStatus){
-        if(getStatus().naoPodeAlterarPara(novoStatus)){
+    private void setStatus(StatusPedido novoStatus) {
+        if (getStatus().naoPodeAlterarPara(novoStatus)) {
             throw new NegocioException(String.format("Status do pedido %s não pode ser alterado de %s para %s",
                     getCodigo(), getStatus().getDescricao(), novoStatus.getDescricao()));
         }
@@ -91,7 +91,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     }
 
     @PrePersist
-    private void gerarCodigo(){
+    private void gerarCodigo() {
         setCodigo(UUID.randomUUID().toString());
     }
 }

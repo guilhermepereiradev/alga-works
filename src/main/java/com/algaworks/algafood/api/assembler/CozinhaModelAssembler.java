@@ -15,11 +15,11 @@ public class CozinhaModelAssembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public CozinhaModel toModel(Cozinha cozinha){
+    public CozinhaModel toModel(Cozinha cozinha) {
         return modelMapper.map(cozinha, CozinhaModel.class);
     }
 
-    public List<CozinhaModel> toCollectionModel(List<Cozinha> cozinhas){
+    public List<CozinhaModel> toCollectionModel(List<Cozinha> cozinhas) {
         return cozinhas.stream().map(this::toModel).collect(Collectors.toList());
     }
 }

@@ -32,23 +32,23 @@ public class EstadoController {
     private EstadoInputDisassembler estadoInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<EstadoModel>> listar(){
+    public ResponseEntity<List<EstadoModel>> listar() {
         return ResponseEntity.ok().body(estadoModelAssembler.toCollectionModels(estadoRepository.findAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EstadoModel> buscar(@PathVariable Long id){
+    public ResponseEntity<EstadoModel> buscar(@PathVariable Long id) {
         return ResponseEntity.ok().body(estadoModelAssembler.toModel(cadastroEstado.buscarOuFalhar(id)));
     }
 
     @PostMapping
-    public ResponseEntity<EstadoModel> salvar(@RequestBody @Valid EstadoInput estadoInput){
+    public ResponseEntity<EstadoModel> salvar(@RequestBody @Valid EstadoInput estadoInput) {
         Estado estado = cadastroEstado.salvar(estadoInputDisassembler.toDomainObject(estadoInput));
         return ResponseEntity.status(HttpStatus.CREATED).body(estadoModelAssembler.toModel(estado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EstadoModel> atualizar(@RequestBody @Valid EstadoInput estadoInput, @PathVariable Long id){
+    public ResponseEntity<EstadoModel> atualizar(@RequestBody @Valid EstadoInput estadoInput, @PathVariable Long id) {
         Estado estadoAtual = cadastroEstado.buscarOuFalhar(id);
         estadoInputDisassembler.copyToDomainObject(estadoInput, estadoAtual);
 
@@ -56,7 +56,7 @@ public class EstadoController {
     }
 
     @DeleteMapping("/{id}")
-    public void remover(@PathVariable Long id){
+    public void remover(@PathVariable Long id) {
         cadastroEstado.remover(id);
     }
 }

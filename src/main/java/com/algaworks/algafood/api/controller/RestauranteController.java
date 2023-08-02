@@ -49,7 +49,7 @@ public class RestauranteController {
     private RestauranteInputDisassembler restauranteInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<MappingJacksonValue> listar(@RequestParam(required = false) String projecao){
+    public ResponseEntity<MappingJacksonValue> listar(@RequestParam(required = false) String projecao) {
         List<Restaurante> restauranteList = cadastroRestaurante.listar();
         List<RestauranteModel> restauranteModelList = restauranteModelAssembler.toCollectionModel(restauranteList);
 
@@ -57,7 +57,7 @@ public class RestauranteController {
 
         restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
 
-        if ("apenas-nome".equals(projecao)){
+        if ("apenas-nome".equals(projecao)) {
             restaurantesWrapper.setSerializationView(RestauranteView.ApenasNome.class);
         } else if ("completo".equals(projecao)) {
             restaurantesWrapper.setSerializationView(null);
@@ -67,36 +67,36 @@ public class RestauranteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RestauranteModel> buscar(@PathVariable Long id){
+    public ResponseEntity<RestauranteModel> buscar(@PathVariable Long id) {
         return ResponseEntity.ok().body(restauranteModelAssembler.toModel(cadastroRestaurante.buscarOuFalhar(id)));
     }
 
     @PostMapping
-    public ResponseEntity<RestauranteModel> adicionar(@RequestBody @Valid RestauranteInput restauranteInput){
-        try{
+    public ResponseEntity<RestauranteModel> adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
+        try {
             Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante)));
-        }catch (EntidadeNaoEncontradaException e){
+        } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput restauranteInput){
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput restauranteInput) {
         Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(id);
 
         restauranteInputDisassembler.copyToDomainObject(restauranteInput, restauranteAtual);
 
-        try{
+        try {
             return ResponseEntity.ok().body(restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restauranteAtual)));
-        }catch (EntidadeNaoEncontradaException e){
+        } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
 
     @PutMapping("/{id}/ativo")
-    public ResponseEntity<Void>  ativar(@PathVariable Long id){
+    public ResponseEntity<Void> ativar(@PathVariable Long id) {
         cadastroRestaurante.ativar(id);
         return ResponseEntity.noContent().build();
     }
@@ -108,39 +108,39 @@ public class RestauranteController {
     }
 
     @PutMapping("/ativacoes")
-    public ResponseEntity<Void> ativarMultiplos(@RequestBody List<Long> restauranteIds){
+    public ResponseEntity<Void> ativarMultiplos(@RequestBody List<Long> restauranteIds) {
         try {
             cadastroRestaurante.ativar(restauranteIds);
             return ResponseEntity.ok().build();
-        }catch (RestauranteNaoEncontradoException e){
+        } catch (RestauranteNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }
 
     @DeleteMapping("/ativacoes")
-    public ResponseEntity<Void> inativarMultiplos(@RequestBody List<Long> restauranteIds){
+    public ResponseEntity<Void> inativarMultiplos(@RequestBody List<Long> restauranteIds) {
         try {
             cadastroRestaurante.inativar(restauranteIds);
             return ResponseEntity.ok().build();
-        }catch (RestauranteNaoEncontradoException e){
+        } catch (RestauranteNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }
 
     @PutMapping("/{id}/abertura")
-    public ResponseEntity<Void> abrir(@PathVariable Long id){
+    public ResponseEntity<Void> abrir(@PathVariable Long id) {
         cadastroRestaurante.abrir(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/fechamento")
-    public ResponseEntity<Void> fechar(@PathVariable Long id){
+    public ResponseEntity<Void> fechar(@PathVariable Long id) {
         cadastroRestaurante.fechar(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> dadosOrigem, HttpServletRequest request){
+    public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> dadosOrigem, HttpServletRequest request) {
         Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(id);
 
         merge(dadosOrigem, restauranteAtual, request);
@@ -149,7 +149,7 @@ public class RestauranteController {
 
         CozinhaIdInput cozinhaIdInput = new CozinhaIdInput();
         cozinhaIdInput.setId(restauranteAtual.getCozinha().getId());
-        
+
         RestauranteInput restauranteInput = new RestauranteInput();
         restauranteInput.setNome(restauranteAtual.getNome());
         restauranteInput.setTaxaFrete(restauranteAtual.getTaxaFrete());
@@ -183,7 +183,7 @@ public class RestauranteController {
 
                 ReflectionUtils.setField(field, restauranteDestino, novoValor);
             });
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             Throwable rootCause = ExceptionUtils.getRootCause(e);
             throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
         }

@@ -16,19 +16,19 @@ public class FluxoPedidoController {
     private FluxoPedidoService fluxoPedidoService;
 
     @PutMapping("/confirmacao")
-    public ResponseEntity<Void> confirmar(@PathVariable String codigo){
+    public ResponseEntity<Void> confirmar(@PathVariable String codigo) {
         fluxoPedidoService.confirmar(codigo);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/entrega")
-    public ResponseEntity<Void> entregar(@PathVariable String codigo){
+    public ResponseEntity<Void> entregar(@PathVariable String codigo) {
         fluxoPedidoService.entregar(codigo);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/cancelamento")
-    public ResponseEntity<Void> cancelar(@PathVariable String codigo){
+    public ResponseEntity<Void> cancelar(@PathVariable String codigo) {
         fluxoPedidoService.cancelar(codigo);
         return ResponseEntity.noContent().build();
     }

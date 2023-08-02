@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UsuarioComSenhaInput extends UsuarioInput{
+public class UsuarioComSenhaInput extends UsuarioInput {
     @NotBlank
     private String senha;
 }

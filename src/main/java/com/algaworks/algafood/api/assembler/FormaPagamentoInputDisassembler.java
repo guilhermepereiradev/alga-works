@@ -12,11 +12,11 @@ public class FormaPagamentoInputDisassembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public FormaPagamento toDomainModel(FormaPagamentoInput formaPagamentoInput){
+    public FormaPagamento toDomainModel(FormaPagamentoInput formaPagamentoInput) {
         return modelMapper.map(formaPagamentoInput, FormaPagamento.class);
     }
 
-    public void copyToDomainObject(FormaPagamentoInput formaPagamentoInput, FormaPagamento formaPagamento){
+    public void copyToDomainObject(FormaPagamentoInput formaPagamentoInput, FormaPagamento formaPagamento) {
         modelMapper.map(formaPagamentoInput, formaPagamento);
     }
 }

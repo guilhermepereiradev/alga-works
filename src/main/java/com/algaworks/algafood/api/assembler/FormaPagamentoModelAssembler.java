@@ -16,11 +16,11 @@ public class FormaPagamentoModelAssembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public FormaPagamentoModel toModel(FormaPagamento formaPagamento){
+    public FormaPagamentoModel toModel(FormaPagamento formaPagamento) {
         return modelMapper.map(formaPagamento, FormaPagamentoModel.class);
     }
 
-    public List<FormaPagamentoModel> toCollectionModels(Collection<FormaPagamento> formaPagamentos){
+    public List<FormaPagamentoModel> toCollectionModels(Collection<FormaPagamento> formaPagamentos) {
         return formaPagamentos.stream().map(this::toModel).collect(Collectors.toList());
     }
 }

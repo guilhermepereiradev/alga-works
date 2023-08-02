@@ -41,7 +41,7 @@ public class EmissaoPedidoService {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
         FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(pedido.getFormaPagamento().getId());
 
-        if(!restaurante.aceitaFormaPagamento(formaPagamento)){
+        if (!restaurante.aceitaFormaPagamento(formaPagamento)) {
             throw new NegocioException(String.format("Restaurante de código %d não aceita forma de pagamento: %s",
                     restauranteId, formaPagamento.getDescricao()));
         }
@@ -51,8 +51,8 @@ public class EmissaoPedidoService {
         pedido.setFormaPagamento(formaPagamento);
     }
 
-    public void validarItens(Pedido pedido){
-        pedido.getItens().forEach( item -> {
+    public void validarItens(Pedido pedido) {
+        pedido.getItens().forEach(item -> {
             Produto produto = produtoService.buscarOuFalhar(
                     pedido.getRestaurante().getId(), item.getProduto().getId());
 

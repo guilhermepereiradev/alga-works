@@ -12,11 +12,11 @@ public class PedidoFilterInputDisassembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public PedidoFilter toDomainObject(PedidoFilterInput pedidoFilterInput){
+    public PedidoFilter toDomainObject(PedidoFilterInput pedidoFilterInput) {
         return modelMapper.map(pedidoFilterInput, PedidoFilter.class);
     }
 
-    public void copyToDomainObject(PedidoFilterInput pedidoFilterInput, PedidoFilter pedidoFilter){
+    public void copyToDomainObject(PedidoFilterInput pedidoFilterInput, PedidoFilter pedidoFilter) {
         modelMapper.map(pedidoFilterInput, pedidoFilter);
     }
 }

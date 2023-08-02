@@ -31,7 +31,7 @@ public class ValorZeroIncluiDescricaoValidator implements ConstraintValidator<Va
             BigDecimal valor = (BigDecimal) BeanUtils.getPropertyDescriptor(obj.getClass(), valorField).getReadMethod().invoke(obj);
             String descricao = (String) BeanUtils.getPropertyDescriptor(obj.getClass(), descricaoField).getReadMethod().invoke(obj);
 
-            if(valor != null && BigDecimal.ZERO.compareTo(valor) == 0 && descricao != null){
+            if (valor != null && BigDecimal.ZERO.compareTo(valor) == 0 && descricao != null) {
                 valido = descricao.toLowerCase().contains(this.descricaoObrigatoria.toLowerCase());
             }
 

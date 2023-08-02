@@ -12,7 +12,7 @@ public class CadastroPermissaoService {
     @Autowired
     private PermissaoRepository repository;
 
-    public Permissao buscarOuFalhar(Long id){
+    public Permissao buscarOuFalhar(Long id) {
         return repository.findById(id).orElseThrow(() -> new PermissaoNaoEncontradaException(id));
     }
 }

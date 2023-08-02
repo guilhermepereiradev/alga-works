@@ -23,7 +23,7 @@ public class RestauranteInputDisassembler {
 //        com.algaworks.algafood.domain.model.Cozinha was altered from 1 to 2
         restaurante.setCozinha(new Cozinha());
 
-        if(restaurante.getEndereco() != null){
+        if (restaurante.getEndereco() != null) {
             restaurante.getEndereco().setCidade(new Cidade());
         }
 

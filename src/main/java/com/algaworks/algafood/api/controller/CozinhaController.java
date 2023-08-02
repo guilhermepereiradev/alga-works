@@ -41,12 +41,12 @@ public class CozinhaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CozinhaModel> buscar(@PathVariable Long id){
+    public ResponseEntity<CozinhaModel> buscar(@PathVariable Long id) {
         return ResponseEntity.ok().body(cozinhaAssembler.toModel(cadastroCozinha.buscarOuFalhar(id)));
     }
 
     @PostMapping
-    public ResponseEntity<CozinhaModel> salvar(@RequestBody @Valid CozinhaInput cozinhaInput){
+    public ResponseEntity<CozinhaModel> salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
         CozinhaModel novaCozinha = cozinhaAssembler.toModel(cadastroCozinha.salvar(cozinha));
 
@@ -56,7 +56,7 @@ public class CozinhaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CozinhaModel> atualizar(@PathVariable Long id, @RequestBody @Valid CozinhaInput cozinhaInput){
+    public ResponseEntity<CozinhaModel> atualizar(@PathVariable Long id, @RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(id);
         cozinhaInputDisassembler.copyToDomainObject(cozinhaInput, cozinhaAtual);
 
@@ -64,7 +64,7 @@ public class CozinhaController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id){
+    public void deletar(@PathVariable Long id) {
         cadastroCozinha.remover(id);
     }
 }

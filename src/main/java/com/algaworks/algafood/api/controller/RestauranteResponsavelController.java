@@ -21,19 +21,19 @@ public class RestauranteResponsavelController {
     private UsuarioModelAssembler usuarioModelAssembler;
 
     @GetMapping
-    public ResponseEntity<List<UsuarioModel>> listar(@PathVariable Long restauranteId){
+    public ResponseEntity<List<UsuarioModel>> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
         return ResponseEntity.ok().body(usuarioModelAssembler.toCollectionModel(restaurante.getUsuariosResponsaveis()));
     }
 
     @DeleteMapping("/{responsavelId}")
-    public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long responsavelId){
+    public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long responsavelId) {
         restauranteService.desassociarUsuarioResponsavel(restauranteId, responsavelId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{responsavelId}")
-    public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long responsavelId){
+    public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long responsavelId) {
         restauranteService.associarUsuarioResponsavel(restauranteId, responsavelId);
         return ResponseEntity.noContent().build();
     }

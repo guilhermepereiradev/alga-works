@@ -19,17 +19,17 @@ public class CadastroProdutoService {
     private CadastroRestauranteService restauranteService;
 
 
-    public Produto buscarOuFalhar(Long restauranteId, Long produtoId){
+    public Produto buscarOuFalhar(Long restauranteId, Long produtoId) {
         return repository.findById(restauranteId, produtoId).orElseThrow(
                 () -> new ProdutoNaoEncontradoException(produtoId, restauranteId)
         );
     }
 
-    public List<Produto> buscarPeloRestauranteId(Long restauranteId){
+    public List<Produto> buscarPeloRestauranteId(Long restauranteId) {
         return repository.findByRestaurante(restauranteService.buscarOuFalhar(restauranteId));
     }
 
-    public List<Produto> buscarAtivosPeloRestaurante(Long restauranteId){
+    public List<Produto> buscarAtivosPeloRestaurante(Long restauranteId) {
         return repository.findAtivosByRestaurante(restauranteService.buscarOuFalhar(restauranteId));
     }
 

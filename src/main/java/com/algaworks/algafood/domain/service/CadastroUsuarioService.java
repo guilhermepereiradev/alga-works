@@ -21,17 +21,17 @@ public class CadastroUsuarioService {
     @Autowired
     private CadastroGrupoService grupoService;
 
-    public Usuario buscarOuFalhar(Long id){
+    public Usuario buscarOuFalhar(Long id) {
         return repository.findById(id).orElseThrow(() -> new UsuarioNaoEncontradoException(id));
     }
 
     @Transactional
-    public Usuario salvar(Usuario usuario){
+    public Usuario salvar(Usuario usuario) {
         repository.detach(usuario);
 
         Optional<Usuario> usuarioExistente = repository.findByEmail(usuario.getEmail());
 
-        if(usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)){
+        if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
             throw new NegocioException(String.format("Já existe um usuário cadastrado com o email: %s", usuario.getEmail()));
         }
 
@@ -40,9 +40,9 @@ public class CadastroUsuarioService {
 
     @Transactional
     public void deletar(Long id) {
-        try{
+        try {
             repository.deleteById(id);
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new UsuarioNaoEncontradoException(id);
         }
     }
@@ -51,7 +51,7 @@ public class CadastroUsuarioService {
     public void alterarSenha(Long id, String senhaAtual, String novaSenha) {
         Usuario usuario = buscarOuFalhar(id);
 
-        if(!usuario.verificaSenhaIgualSenhaAtual(senhaAtual)){
+        if (!usuario.verificaSenhaIgualSenhaAtual(senhaAtual)) {
             throw new NegocioException("Senha atual informada não coincide com a senha do usuário");
         }
 
@@ -59,7 +59,7 @@ public class CadastroUsuarioService {
     }
 
     @Transactional
-    public void associarGrupo(Long usuarioId, Long grupoId){
+    public void associarGrupo(Long usuarioId, Long grupoId) {
         Usuario usuario = buscarOuFalhar(usuarioId);
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
 
@@ -67,7 +67,7 @@ public class CadastroUsuarioService {
     }
 
     @Transactional
-    public void desassociarGrupo(Long usuarioId, Long grupoId){
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
         Usuario usuario = buscarOuFalhar(usuarioId);
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
 

@@ -12,11 +12,11 @@ public class GrupoInputDisassempler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Grupo toDomainModel(GrupoInput grupoInput){
+    public Grupo toDomainModel(GrupoInput grupoInput) {
         return modelMapper.map(grupoInput, Grupo.class);
     }
 
-    public void copyToDomainObject(GrupoInput grupoInput, Grupo grupo){
+    public void copyToDomainObject(GrupoInput grupoInput, Grupo grupo) {
         modelMapper.map(grupoInput, grupo);
     }
 }

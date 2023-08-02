@@ -33,7 +33,7 @@ public class RestauranteProdutoController {
     private ProdutoInputDisassembler produtoInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<ProdutoModel>> listar(@PathVariable Long restauranteId, @RequestParam(required = false) Boolean incluirInativo){
+    public ResponseEntity<List<ProdutoModel>> listar(@PathVariable Long restauranteId, @RequestParam(required = false) Boolean incluirInativo) {
         List<ProdutoModel> produtoModelList;
 
         if (incluirInativo != null && incluirInativo) {
@@ -46,12 +46,12 @@ public class RestauranteProdutoController {
     }
 
     @GetMapping("/{produtoId}")
-    public ResponseEntity<ProdutoModel> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId){
+    public ResponseEntity<ProdutoModel> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         return ResponseEntity.ok().body(produtoModelAssembler.toModel(produtoService.buscarOuFalhar(restauranteId, produtoId)));
     }
 
     @PostMapping()
-    public ResponseEntity<ProdutoModel> salvar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput){
+    public ResponseEntity<ProdutoModel> salvar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 
         Produto produto = produtoInputDisassembler.toDomainModel(produtoInput);
@@ -61,7 +61,7 @@ public class RestauranteProdutoController {
     }
 
     @PutMapping("/{produtoId}")
-    public ResponseEntity<ProdutoModel> atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput){
+    public ResponseEntity<ProdutoModel> atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput) {
         Produto produtoAtual = produtoService.buscarOuFalhar(restauranteId, produtoId);
 
         produtoInputDisassembler.copyToDomainObject(produtoInput, produtoAtual);

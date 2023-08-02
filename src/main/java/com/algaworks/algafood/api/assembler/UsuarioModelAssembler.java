@@ -16,11 +16,11 @@ public class UsuarioModelAssembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public UsuarioModel toModel(Usuario usuario){
+    public UsuarioModel toModel(Usuario usuario) {
         return modelMapper.map(usuario, UsuarioModel.class);
     }
 
-    public List<UsuarioModel> toCollectionModel(Collection<Usuario> usuarios){
+    public List<UsuarioModel> toCollectionModel(Collection<Usuario> usuarios) {
         return usuarios.stream().map(this::toModel).collect(Collectors.toList());
     }
 }

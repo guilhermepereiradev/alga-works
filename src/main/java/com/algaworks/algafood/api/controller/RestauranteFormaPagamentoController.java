@@ -21,19 +21,19 @@ public class RestauranteFormaPagamentoController {
     private FormaPagamentoModelAssembler formaPagamentoModelAssembler;
 
     @GetMapping
-    public ResponseEntity<List<FormaPagamentoModel>> listar(@PathVariable Long restauranteId){
+    public ResponseEntity<List<FormaPagamentoModel>> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
         return ResponseEntity.ok().body(formaPagamentoModelAssembler.toCollectionModels(restaurante.getFormasPagamento()));
     }
 
     @PutMapping("/{formaPagamentoId}")
-    public ResponseEntity<List<Void>> associarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId){
+    public ResponseEntity<List<Void>> associarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
         cadastroRestaurante.associarFormaPagamento(restauranteId, formaPagamentoId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{formaPagamentoId}")
-    public ResponseEntity<List<Void>> desassociarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId){
+    public ResponseEntity<List<Void>> desassociarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
         cadastroRestaurante.desassociarFormaPagamento(restauranteId, formaPagamentoId);
         return ResponseEntity.noContent().build();
     }

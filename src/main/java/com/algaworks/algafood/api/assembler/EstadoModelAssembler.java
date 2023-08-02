@@ -15,11 +15,11 @@ public class EstadoModelAssembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public EstadoModel toModel(Estado estado){
+    public EstadoModel toModel(Estado estado) {
         return modelMapper.map(estado, EstadoModel.class);
     }
 
-    public List<EstadoModel> toCollectionModels(List<Estado> estados){
+    public List<EstadoModel> toCollectionModels(List<Estado> estados) {
         return estados.stream().map(this::toModel).collect(Collectors.toList());
     }
 }

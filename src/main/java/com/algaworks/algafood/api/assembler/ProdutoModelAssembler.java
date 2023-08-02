@@ -16,11 +16,11 @@ public class ProdutoModelAssembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ProdutoModel toModel(Produto produto){
+    public ProdutoModel toModel(Produto produto) {
         return modelMapper.map(produto, ProdutoModel.class);
     }
 
-    public List<ProdutoModel> toCollectionModel(Collection<Produto> produtos){
+    public List<ProdutoModel> toCollectionModel(Collection<Produto> produtos) {
         return produtos.stream().map(this::toModel).collect(Collectors.toList());
     }
 }

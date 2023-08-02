@@ -17,19 +17,19 @@ public class CadastroPedidoService {
     @Autowired
     private PedidoRepository repository;
 
-    public List<Pedido> listar(){
+    public List<Pedido> listar() {
         return repository.findAll();
     }
 
-    public Page<Pedido> listar(Specification<Pedido> specification, Pageable pageable){
+    public Page<Pedido> listar(Specification<Pedido> specification, Pageable pageable) {
         return repository.findAll(specification, pageable);
     }
 
-    public Pedido buscarOuFalhar(String codigo){
+    public Pedido buscarOuFalhar(String codigo) {
         return repository.findByCodigo(codigo).orElseThrow(() -> new PedidoNaoEncontradoException(codigo));
     }
 
     public Pedido salvar(Pedido pedido) {
-       return repository.save(pedido);
+        return repository.save(pedido);
     }
 }
