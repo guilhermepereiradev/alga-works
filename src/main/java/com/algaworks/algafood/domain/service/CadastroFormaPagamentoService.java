@@ -10,11 +10,18 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
+import java.util.List;
+
 @Service
 public class CadastroFormaPagamentoService {
 
     @Autowired
     private FormaPagamentoRepository repository;
+
+    public List<FormaPagamento> listar() {
+        return repository.findAll();
+    }
 
     public FormaPagamento buscarOuFalhar(Long id) {
         return repository.findById(id).orElseThrow(() -> new FormaPagamentoNaoEncontradaException(id));
@@ -35,5 +42,13 @@ public class CadastroFormaPagamentoService {
         } catch (DataIntegrityViolationException e) {
             throw new NegocioException(String.format("Forma de pagamento de código %d não pode ser removida por estar em uso", id), e);
         }
+    }
+
+    public OffsetDateTime getUltimaDataAtualizacao() {
+        return repository.getDataUltimaAtualizacao();
+    }
+
+    public OffsetDateTime getDataAtulizacao(Long id) {
+        return repository.getdDataAtualizacao(id);
     }
 }
