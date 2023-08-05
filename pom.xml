@@ -21,6 +21,7 @@
 		<flyway-core.version>9.16.0</flyway-core.version>
 		<jasperreports.version>6.20.1</jasperreports.version>
 		<aws-java-sdk-s3.version>1.12.512</aws-java-sdk-s3.version>
+		<springdoc.openapi.version>2.0.0</springdoc.openapi.version>
 	</properties>
 
 	<dependencies>
@@ -105,6 +106,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc.openapi.version}</version>
+		</dependency>
     </dependencies>
 	<build>
 		<plugins>

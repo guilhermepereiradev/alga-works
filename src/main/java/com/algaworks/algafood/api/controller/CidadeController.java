@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.api.assembler.CidadeInputDisassembler;
 import com.algaworks.algafood.api.assembler.CidadeModelAssembler;
+import com.algaworks.algafood.api.controller.openapi.CidadeControllerOpenApi;
 import com.algaworks.algafood.api.model.CidadeModel;
 import com.algaworks.algafood.api.model.input.CidadeInput;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cidades")
-public class CidadeController {
+public class CidadeController implements CidadeControllerOpenApi {
 
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -66,7 +67,8 @@ public class CidadeController {
     }
 
     @DeleteMapping("/{id}")
-    public void remover(@PathVariable Long id) {
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
         cadastroCidade.remover(id);
+        return ResponseEntity.noContent().build();
     }
 }
