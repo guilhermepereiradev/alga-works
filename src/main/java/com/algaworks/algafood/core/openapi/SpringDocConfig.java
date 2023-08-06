@@ -1,6 +1,8 @@
 package com.algaworks.algafood.core.openapi;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
+import com.algaworks.algafood.api.openapi.model.PageModelOpenApi;
+import com.algaworks.algafood.api.openapi.model.PageableModelOpenApi;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.PathItem;
@@ -15,10 +17,14 @@ import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import java.lang.reflect.Type;
 
+import static org.springdoc.core.utils.SpringDocUtils.getConfig;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Configuration
@@ -28,13 +34,22 @@ public class SpringDocConfig {
     private static final String MSG_RECURSO_NAO_POSSUI_REPRESENTACAO = "Recurso não possui representação que " +
             "poderia ser aceita pelo consumidor";
 
+    static {
+        getConfig()
+                .replaceParameterObjectWithClass(Pageable.class, PageableModelOpenApi.class)
+                .replaceParameterObjectWithClass(PageRequest.class, PageableModelOpenApi.class)
+                .replaceWithClass(Page.class, PageModelOpenApi.class);
+    }
+
     @Bean
     public GroupedOpenApi groupedOpenApi() {
         return GroupedOpenApi.builder()
                 .group("com.algaworks.algafood.api")
                 .pathsToMatch("/**")
-                .addOpenApiCustomizer(addSchemas(Problem.class))
-                .addOpenApiCustomizer(addSchemas(Problem.Object.class))
+                .addOpenApiCustomizer(addSchema(PageableModelOpenApi.class))
+                .addOpenApiCustomizer(addSchema(Problem.class))
+                .addOpenApiCustomizer(addSchema(Problem.Object.class))
+                .addOpenApiCustomizer(addSchema(PageModelOpenApi.class))
                 .addOpenApiCustomizer(globalGetResponseMessages())
                 .addOpenApiCustomizer(globalPostPutResponseMessages())
                 .addOpenApiCustomizer(globalDeleteResponseMessages())
@@ -46,10 +61,13 @@ public class SpringDocConfig {
         return new OpenAPI().info(new Info().title("Algafood API")
                         .description("API aberta para clientes e restaurantes")
                         .version("1"))
-                .addTagsItem(new Tag().name("Cidades").description("Gerencia as cidades"));
+                .addTagsItem(new Tag().name("Cidades").description("Gerencia as cidades"))
+                .addTagsItem(new Tag().name("Grupos").description("Gerencia os grupos de usuários"))
+                .addTagsItem(new Tag().name("Cozinhas").description("Gerencia as cozinhas"));
+
     }
 
-    private OpenApiCustomizer addSchemas(Type tipo) {
+    private OpenApiCustomizer addSchema(Type tipo) {
         return openApi -> openApi.getComponents().getSchemas().putAll(ModelConverters.getInstance().read(tipo));
     }
 

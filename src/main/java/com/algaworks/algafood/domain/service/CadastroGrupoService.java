@@ -9,6 +9,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CadastroGrupoService {
 
@@ -50,5 +52,9 @@ public class CadastroGrupoService {
         Permissao permissao = permissaoService.buscarOuFalhar(permissaoId);
 
         grupo.removerPermissao(permissao);
+    }
+
+    public List<Grupo> listar() {
+        return repository.findAll();
     }
 }

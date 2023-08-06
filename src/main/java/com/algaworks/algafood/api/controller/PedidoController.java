@@ -17,6 +17,7 @@ import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -72,7 +73,7 @@ public class PedidoController {
 //    }
 
     @GetMapping
-    public ResponseEntity<Page<PedidoResumoModel>> listar(Pageable pageable, PedidoFilterInput pedidoFilterInput) {
+    public ResponseEntity<Page<PedidoResumoModel>> listar(@ParameterObject Pageable pageable, PedidoFilterInput pedidoFilterInput) {
         pageable = traduzirPageable(pageable);
 
         Specification<Pedido> pedidoSpec = PedidoSpecs.usandoFiltro(pedidoFilterInputDisassembler.toDomainObject(pedidoFilterInput));

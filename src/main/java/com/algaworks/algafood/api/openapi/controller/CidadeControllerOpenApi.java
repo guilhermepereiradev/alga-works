@@ -1,4 +1,4 @@
-package com.algaworks.algafood.api.controller.openapi;
+package com.algaworks.algafood.api.openapi.controller;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.CidadeModel;
@@ -18,12 +18,13 @@ public interface CidadeControllerOpenApi {
     @Operation(summary = "Lista as cidades")
     ResponseEntity<List<CidadeModel>> listar();
 
-    @Operation(summary = "Busca uma cidade por ID",
+    @Operation(
+            summary = "Busca uma cidade por ID",
             parameters = @Parameter(name = "id", description = "ID de uma cidade", example = "1"),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "OK",
+                            description = "Cidade encontrada",
                             content = @Content(schema = @Schema(implementation = CidadeModel.class))),
                     @ApiResponse(
                             responseCode = "400",
@@ -32,19 +33,24 @@ public interface CidadeControllerOpenApi {
                     @ApiResponse(
                             responseCode = "404",
                             description = "Cidade não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))})
+                            content = @Content(schema = @Schema(implementation = Problem.class)))
+            }
+    )
     ResponseEntity<CidadeModel> buscar(Long id);
 
-    @Operation(summary = "Cadastra uma cidade",
+    @Operation(
+            summary = "Cadastra uma cidade",
             responses = {
                     @ApiResponse(
                             responseCode = "201",
                             description = "Cidade criada",
                             content = @Content(schema = @Schema(implementation = CidadeModel.class)))
-            })
+            }
+    )
     ResponseEntity<CidadeModel> salvar(CidadeInput cidadeInput);
 
-    @Operation(summary = "Atualiza uma cidade por ID",
+    @Operation(
+            summary = "Atualiza uma cidade por ID",
             parameters = @Parameter(name = "id", description = "ID de uma cidade", example = "1"),
             responses = {
                     @ApiResponse(
@@ -59,16 +65,18 @@ public interface CidadeControllerOpenApi {
     )
     ResponseEntity<CidadeModel> atualizar(CidadeInput cidadeInput, Long id);
 
-    @Operation(summary = "Exclui uma cidade por ID",
+    @Operation(
+            summary = "Exclui uma cidade por ID",
             parameters = @Parameter(name = "id", description = "ID de uma cidade", example = "1"),
             responses = {
                     @ApiResponse(
                             responseCode = "204",
-                            description = "Cidade excluída"),
+                            description = "Cidade excluída com sucesso"),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Cidade não encontrada",
                             content = @Content(schema = @Schema(implementation = Problem.class)))
-            })
+            }
+    )
     ResponseEntity<Void> remover(Long id);
 }

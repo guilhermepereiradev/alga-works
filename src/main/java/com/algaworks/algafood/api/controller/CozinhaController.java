@@ -4,9 +4,9 @@ import com.algaworks.algafood.api.assembler.CozinhaInputDisassembler;
 import com.algaworks.algafood.api.assembler.CozinhaModelAssembler;
 import com.algaworks.algafood.api.model.CozinhaModel;
 import com.algaworks.algafood.api.model.input.CozinhaInput;
+import com.algaworks.algafood.api.openapi.controller.CozinhaControllerOpenApi;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,10 +20,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@Tag(name = "Cozinhas")
 @RestController
 @RequestMapping(value = "/cozinhas")
-public class CozinhaController {
+public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Autowired
     private CadastroCozinhaService cadastroCozinha;
@@ -33,6 +32,7 @@ public class CozinhaController {
 
     @Autowired
     private CozinhaInputDisassembler cozinhaInputDisassembler;
+
 
     @GetMapping
     public ResponseEntity<Page<CozinhaModel>> listar(@PageableDefault(size = 2) Pageable pageable) {
@@ -66,7 +66,8 @@ public class CozinhaController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         cadastroCozinha.remover(id);
+        return ResponseEntity.noContent().build();
     }
 }

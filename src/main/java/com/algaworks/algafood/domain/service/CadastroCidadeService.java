@@ -11,6 +11,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CadastroCidadeService {
     @Autowired
@@ -42,5 +44,9 @@ public class CadastroCidadeService {
 
     public Cidade buscarOuFalhar(Long id) {
         return cidadeRepository.findById(id).orElseThrow(() -> new CidadeNaoEncontradoException(id));
+    }
+
+    public List<Cidade> listar() {
+        return cidadeRepository.findAll();
     }
 }
