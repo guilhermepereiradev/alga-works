@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class CidadeInput {
 
-    @Schema(example = "Sete Lagoas")
+    @Schema(example = "Uberlândia")
     @NotBlank
     private String nome;
 

@@ -12,7 +12,7 @@ public class CidadeModel {
     @Schema(example = "1")
     private Long id;
 
-    @Schema(example = "Sete Lagoas")
+    @Schema(example = "Uberlândia")
     private String nome;
 
     private EstadoModel estado;
