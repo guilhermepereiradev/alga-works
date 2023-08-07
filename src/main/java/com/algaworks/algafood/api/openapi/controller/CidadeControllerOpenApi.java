@@ -25,15 +25,18 @@ public interface CidadeControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Cidade encontrada",
-                            content = @Content(schema = @Schema(implementation = CidadeModel.class))),
+                            content = @Content(schema = @Schema(implementation = CidadeModel.class))
+                    ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "ID da cidade inválido",
-                            content = @Content(schema = @Schema(implementation = Problem.class))),
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Cidade não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<CidadeModel> buscar(Long id);
@@ -44,7 +47,8 @@ public interface CidadeControllerOpenApi {
                     @ApiResponse(
                             responseCode = "201",
                             description = "Cidade criada",
-                            content = @Content(schema = @Schema(implementation = CidadeModel.class)))
+                            content = @Content(schema = @Schema(implementation = CidadeModel.class))
+                    )
             }
     )
     ResponseEntity<CidadeModel> salvar(CidadeInput cidadeInput);
@@ -56,11 +60,13 @@ public interface CidadeControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Cidade atualizada",
-                            content = @Content(schema = @Schema(implementation = CidadeModel.class))),
+                            content = @Content(schema = @Schema(implementation = CidadeModel.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Cidade não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<CidadeModel> atualizar(CidadeInput cidadeInput, Long id);
@@ -75,7 +81,8 @@ public interface CidadeControllerOpenApi {
                     @ApiResponse(
                             responseCode = "404",
                             description = "Cidade não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<Void> remover(Long id);

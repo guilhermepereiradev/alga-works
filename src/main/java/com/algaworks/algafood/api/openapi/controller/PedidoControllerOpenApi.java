@@ -27,7 +27,8 @@ public interface PedidoControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Pedidos encontrado",
-                            content = @Content(schema = @Schema(implementation = PedidosModelOpenApi.class)))
+                            content = @Content(schema = @Schema(implementation = PedidosModelOpenApi.class))
+                    )
             }
     )
     ResponseEntity<Page<PedidoResumoModel>> listar(@ParameterObject Pageable pageable, @ParameterObject PedidoFilterInput pedidoFilterInput);
@@ -40,15 +41,18 @@ public interface PedidoControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Pedido encontrado",
-                            content = @Content(schema = @Schema(implementation = PedidoModel.class))),
+                            content = @Content(schema = @Schema(implementation = PedidoModel.class))
+                    ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Código do pedido inválido",
-                            content = @Content(schema = @Schema(implementation = Problem.class))),
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Pedido não encontrado",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<PedidoModel> buscar(String codigo);
@@ -58,7 +62,8 @@ public interface PedidoControllerOpenApi {
                     @ApiResponse(
                             responseCode = "201",
                             description = "Pedido criado",
-                            content = @Content(schema = @Schema(implementation = PedidoModel.class)))
+                            content = @Content(schema = @Schema(implementation = PedidoModel.class))
+                    )
             }
     )
     ResponseEntity<PedidoModel> emitir(PedidoInput pedidoInput);

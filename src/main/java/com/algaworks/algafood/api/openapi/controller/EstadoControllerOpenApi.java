@@ -1,8 +1,8 @@
 package com.algaworks.algafood.api.openapi.controller;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
-import com.algaworks.algafood.api.model.GrupoModel;
-import com.algaworks.algafood.api.model.input.GrupoInput;
+import com.algaworks.algafood.api.model.EstadoModel;
+import com.algaworks.algafood.api.model.input.EstadoInput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,78 +13,79 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Tag(name = "Grupos")
-public interface GrupoControllerOpenApi {
+@Tag(name = "Estados")
+public interface EstadoControllerOpenApi {
 
-    @Operation(summary = "Lista dos grupos")
-    ResponseEntity<List<GrupoModel>> listar();
+    @Operation(summary = "Lista dos estados")
+    ResponseEntity<List<EstadoModel>> listar();
 
     @Operation(
-            summary = "Buscar um grupo por ID",
-            parameters = @Parameter(name = "id", description = "ID de um grupo", example = "1"),
+            summary = "Buscar um estado por ID",
+            parameters = @Parameter(name = "id", description = "ID de um estado", example = "1"),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Grupo encontrado",
-                            content = @Content(schema = @Schema(implementation = GrupoModel.class))
+                            description = "Estado encontrado",
+                            content = @Content(schema = @Schema(implementation = EstadoModel.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "ID do grupo inválido",
+                            description = "ID do estado inválido",
                             content = @Content(schema = @Schema(implementation = Problem.class))
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Grupo não encontrado",
+                            description = "Estado não encontrado",
                             content = @Content(schema = @Schema(implementation = Problem.class))
                     )
             }
     )
-    ResponseEntity<GrupoModel> buscar(Long id);
+    ResponseEntity<EstadoModel> buscar(Long id);
 
-    @Operation(summary = "Cadastra um grupo",
+    @Operation(
+            summary = "Cadastra um estado",
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            description = "Grupo criado",
-                            content = @Content(schema = @Schema(implementation = GrupoModel.class))
+                            description = "Estado criado",
+                            content = @Content(schema = @Schema(implementation = EstadoModel.class))
                     )
             }
     )
-    ResponseEntity<GrupoModel> salvar(GrupoInput grupoInput);
+    ResponseEntity<EstadoModel> salvar(EstadoInput estadoInput);
 
     @Operation(
-            summary = "Atualiza um grupo por ID",
-            parameters = @Parameter(name = "id", description = "ID de um grupo", example = "1"),
+            summary = "Atualiza um estado por ID",
+            parameters = @Parameter(name = "id", description = "ID de um estado", example = "1"),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Grupo atualizado",
-                            content = @Content(schema = @Schema(implementation = GrupoModel.class))
+                            description = "Estado atualizado",
+                            content = @Content(schema = @Schema(implementation = EstadoModel.class))
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Grupo não encontrado",
+                            description = "Estado não encontrado",
                             content = @Content(schema = @Schema(implementation = Problem.class))
                     )
             }
     )
-    ResponseEntity<GrupoModel> atualizar(Long id, GrupoInput grupoInput);
+    ResponseEntity<EstadoModel> atualizar(EstadoInput estadoInput, Long id);
 
     @Operation(
-            summary = "Exclui um grupo por ID",
-            parameters = @Parameter(name = "id", description = "ID de um grupo", example = "1"),
+            summary = "Exclui um estado por ID",
+            parameters = @Parameter(name = "id", description = "ID de um estado", example = "1"),
             responses = {
                     @ApiResponse(
                             responseCode = "204",
-                            description = "Grupo excluído com sucesso"
+                            description = "Estado excluído com sucesso"
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Grupo não encontrado",
+                            description = "Estado não encontrado",
                             content = @Content(schema = @Schema(implementation = Problem.class))
                     )
             }
     )
-    ResponseEntity<Void> deletar(Long id);
+    ResponseEntity<Void> remover(Long id);
 }

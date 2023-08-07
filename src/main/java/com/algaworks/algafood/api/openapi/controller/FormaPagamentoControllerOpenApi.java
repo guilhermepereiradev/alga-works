@@ -27,15 +27,18 @@ public interface FormaPagamentoControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Forma de pagamento encontrada",
-                            content = @Content(schema = @Schema(implementation = FormaPagamentoModel.class))),
+                            content = @Content(schema = @Schema(implementation = FormaPagamentoModel.class))
+                    ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "ID da forma de pagamento inválido",
-                            content = @Content(schema = @Schema(implementation = Problem.class))),
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Forma de pagamento não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<FormaPagamentoModel> buscar(Long id, ServletWebRequest request);
@@ -46,7 +49,8 @@ public interface FormaPagamentoControllerOpenApi {
                     @ApiResponse(
                             responseCode = "201",
                             description = "Forma de pagamento criada",
-                            content = @Content(schema = @Schema(implementation = FormaPagamentoModel.class)))
+                            content = @Content(schema = @Schema(implementation = FormaPagamentoModel.class))
+                    )
             }
     )
     ResponseEntity<FormaPagamentoModel> salvar(FormaPagamentoInput formaPagamentoInput);
@@ -58,11 +62,13 @@ public interface FormaPagamentoControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Forma de pagamento atualizada",
-                            content = @Content(schema = @Schema(implementation = FormaPagamentoModel.class))),
+                            content = @Content(schema = @Schema(implementation = FormaPagamentoModel.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Forma de pagamento não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<FormaPagamentoModel> atualizar(Long id, FormaPagamentoInput formaPagamentoInput);
@@ -73,11 +79,13 @@ public interface FormaPagamentoControllerOpenApi {
             responses = {
                     @ApiResponse(
                             responseCode = "204",
-                            description = "Forma de pagamento excluída com sucesso"),
+                            description = "Forma de pagamento excluída com sucesso"
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Forma de pagamento não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<Void> deletar(Long id);

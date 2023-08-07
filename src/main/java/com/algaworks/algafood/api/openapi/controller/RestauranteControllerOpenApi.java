@@ -65,7 +65,8 @@ public interface RestauranteControllerOpenApi {
                     @ApiResponse(
                             responseCode = "201",
                             description = "Restaurante criado",
-                            content = @Content(schema = @Schema(implementation = RestauranteModel.class)))
+                            content = @Content(schema = @Schema(implementation = RestauranteModel.class))
+                    )
             }
     )
     ResponseEntity<RestauranteModel> adicionar(RestauranteInput restauranteInput);
@@ -78,11 +79,13 @@ public interface RestauranteControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Restaurante atualizado",
-                            content = @Content(schema = @Schema(implementation = RestauranteModel.class))),
+                            content = @Content(schema = @Schema(implementation = RestauranteModel.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Restaurante não encontrado",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<?> atualizar(Long id, RestauranteInput restauranteInput);
@@ -97,7 +100,8 @@ public interface RestauranteControllerOpenApi {
                     @ApiResponse(
                             responseCode = "404",
                             description = "Restaurante não encontrado",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<Void> ativar(Long id);

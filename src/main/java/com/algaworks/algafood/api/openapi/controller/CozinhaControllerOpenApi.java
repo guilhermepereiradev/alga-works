@@ -24,7 +24,8 @@ public interface CozinhaControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Cozinhas encontradas",
-                            content = @Content(schema = @Schema(implementation = CozinhasModelOpenApi.class))),
+                            content = @Content(schema = @Schema(implementation = CozinhasModelOpenApi.class))
+                    ),
             }
     )
     ResponseEntity<Page<CozinhaModel>> listar(@ParameterObject Pageable pageable);
@@ -37,15 +38,18 @@ public interface CozinhaControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Cozinha encontrada",
-                            content = @Content(schema = @Schema(implementation = CozinhaModel.class))),
+                            content = @Content(schema = @Schema(implementation = CozinhaModel.class))
+                    ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "ID da cozinha inválido",
-                            content = @Content(schema = @Schema(implementation = Problem.class))),
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Cozinha não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<CozinhaModel> buscar(Long id);
@@ -55,7 +59,8 @@ public interface CozinhaControllerOpenApi {
                     @ApiResponse(
                             responseCode = "201",
                             description = "Cozinha criada",
-                            content = @Content(schema = @Schema(implementation = CozinhaModel.class)))
+                            content = @Content(schema = @Schema(implementation = CozinhaModel.class))
+                    )
             }
     )
     ResponseEntity<CozinhaModel> salvar(CozinhaInput cozinhaInput);
@@ -67,11 +72,13 @@ public interface CozinhaControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Cozinha atualizada",
-                            content = @Content(schema = @Schema(implementation = CozinhaModel.class))),
+                            content = @Content(schema = @Schema(implementation = CozinhaModel.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Cozinha não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<CozinhaModel> atualizar(Long id, CozinhaInput cozinhaInput);
@@ -86,7 +93,8 @@ public interface CozinhaControllerOpenApi {
                     @ApiResponse(
                             responseCode = "404",
                             description = "Cozinha não encontrada",
-                            content = @Content(schema = @Schema(implementation = Problem.class)))
+                            content = @Content(schema = @Schema(implementation = Problem.class))
+                    )
             }
     )
     ResponseEntity<Void> deletar(Long id);
