@@ -4,7 +4,6 @@ import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.CozinhaModel;
 import com.algaworks.algafood.api.model.input.CozinhaInput;
 import com.algaworks.algafood.api.openapi.model.CozinhasModelOpenApi;
-import com.algaworks.algafood.domain.model.Cozinha;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -56,7 +55,7 @@ public interface CozinhaControllerOpenApi {
                     @ApiResponse(
                             responseCode = "201",
                             description = "Cozinha criada",
-                            content = @Content(schema = @Schema(implementation = Cozinha.class)))
+                            content = @Content(schema = @Schema(implementation = CozinhaModel.class)))
             }
     )
     ResponseEntity<CozinhaModel> salvar(CozinhaInput cozinhaInput);
