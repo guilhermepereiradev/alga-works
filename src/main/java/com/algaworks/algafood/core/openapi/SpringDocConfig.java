@@ -68,7 +68,9 @@ public class SpringDocConfig {
                 .addTagsItem(new Tag().name("Pedidos").description("Gerencia os pedidos"))
                 .addTagsItem(new Tag().name("Restaurantes").description("Gerencia os restaurantes"))
                 .addTagsItem(new Tag().name("Estados").description("Gerencia os estados"))
-                .addTagsItem(new Tag().name("Produtos").description("Gerencia os produtos"));
+                .addTagsItem(new Tag().name("Produtos").description("Gerencia os produtos"))
+                .addTagsItem(new Tag().name("Usuários").description("Gerencia os usuários"))
+                .addTagsItem(new Tag().name("Estatísticas").description("Estatísticas da AlgaFood"));
 
     }
 
