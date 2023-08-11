@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.assembler.CozinhaInputDisassembler;
 import com.algaworks.algafood.api.assembler.CozinhaModelAssembler;
 import com.algaworks.algafood.api.model.CozinhaModel;
@@ -16,7 +17,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -26,10 +26,10 @@ import java.util.List;
 public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Autowired
-    private CadastroCozinhaService cadastroCozinha;
+    private CadastroCozinhaService cozinhaService;
 
     @Autowired
-    private CozinhaModelAssembler cozinhaAssembler;
+    private CozinhaModelAssembler cozinhaModelAssembler;
 
     @Autowired
     private CozinhaInputDisassembler cozinhaInputDisassembler;
@@ -37,38 +37,43 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
     @GetMapping
     public ResponseEntity<Page<CozinhaModel>> listar(@PageableDefault(size = 2) Pageable pageable) {
-        Page<Cozinha> cozinhasPage = cadastroCozinha.listar(pageable);
-        List<CozinhaModel> cozinhasModel = cozinhaAssembler.toCollectionModel(cozinhasPage.getContent());
+        Page<Cozinha> cozinhasPage = cozinhaService.listar(pageable);
+        List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
+
         Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
-        return ResponseEntity.ok().body(cozinhasModelPage);
+
+        return ResponseEntity.ok(cozinhasModelPage);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CozinhaModel> buscar(@PathVariable Long id) {
-        return ResponseEntity.ok().body(cozinhaAssembler.toModel(cadastroCozinha.buscarOuFalhar(id)));
+        Cozinha cozinha = cozinhaService.buscarOuFalhar(id);
+        return ResponseEntity.ok(cozinhaModelAssembler.toModel(cozinha));
     }
 
     @PostMapping
     public ResponseEntity<CozinhaModel> salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
-        CozinhaModel novaCozinha = cozinhaAssembler.toModel(cadastroCozinha.salvar(cozinha));
+        cozinha = cozinhaService.salvar(cozinha);
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(novaCozinha.getId()).toUri();
+        URI uri = ResourceUriHelper.createUri(cozinha.getId());
 
-        return ResponseEntity.created(uri).body(novaCozinha);
+        return ResponseEntity.created(uri).body(cozinhaModelAssembler.toModel(cozinha));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CozinhaModel> atualizar(@PathVariable Long id, @RequestBody @Valid CozinhaInput cozinhaInput) {
-        Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(id);
-        cozinhaInputDisassembler.copyToDomainObject(cozinhaInput, cozinhaAtual);
+        Cozinha cozinha = cozinhaService.buscarOuFalhar(id);
+        cozinhaInputDisassembler.copyToDomainObject(cozinhaInput, cozinha);
 
-        return ResponseEntity.ok().body(cozinhaAssembler.toModel(cadastroCozinha.salvar(cozinhaAtual)));
+        cozinha = cozinhaService.salvar(cozinha);
+
+        return ResponseEntity.ok().body(cozinhaModelAssembler.toModel(cozinha));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        cadastroCozinha.remover(id);
+        cozinhaService.remover(id);
         return ResponseEntity.noContent().build();
     }
 }

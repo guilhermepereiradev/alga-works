@@ -8,9 +8,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Tag(name = "Restaurantes")
 public interface RestauranteResponsavelControllerOpenApi {
@@ -29,7 +28,7 @@ public interface RestauranteResponsavelControllerOpenApi {
                     )
             }
     )
-    ResponseEntity<List<UsuarioModel>> listar(Long restauranteId);
+    ResponseEntity<CollectionModel<UsuarioModel>> listar(Long restauranteId);
 
     @Operation(
             summary = "Desassociação de restaurante com usuário responsável",

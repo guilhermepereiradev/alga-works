@@ -9,14 +9,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Tag(name = "Cidades")
 public interface CidadeControllerOpenApi {
     @Operation(summary = "Lista as cidades")
-    ResponseEntity<List<CidadeModel>> listar();
+    ResponseEntity<CollectionModel<CidadeModel>> listar();
 
     @Operation(
             summary = "Busca uma cidade por ID",

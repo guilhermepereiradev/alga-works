@@ -10,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -72,5 +73,9 @@ public class CadastroUsuarioService {
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
 
         usuario.removerGrupo(grupo);
+    }
+
+    public List<Usuario> listar() {
+        return repository.findAll();
     }
 }

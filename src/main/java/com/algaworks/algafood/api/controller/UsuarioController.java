@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.assembler.UsuarioInputDisassembler;
 import com.algaworks.algafood.api.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.api.model.UsuarioModel;
@@ -8,22 +9,19 @@ import com.algaworks.algafood.api.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafood.api.model.input.UsuarioInput;
 import com.algaworks.algafood.api.openapi.controller.UsuarioControllerOpenApi;
 import com.algaworks.algafood.domain.model.Usuario;
-import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController implements UsuarioControllerOpenApi {
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private CadastroUsuarioService usuarioService;
@@ -35,19 +33,26 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     private UsuarioInputDisassembler usuarioInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<UsuarioModel>> listar() {
-        return ResponseEntity.ok().body(usuarioModelAssembler.toCollectionModel(usuarioRepository.findAll()));
+    public ResponseEntity<CollectionModel<UsuarioModel>> listar() {
+        List<Usuario> usuarios = usuarioService.listar();
+        return ResponseEntity.ok(usuarioModelAssembler.toCollectionModel(usuarios));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioModel> buscar(@PathVariable Long id) {
-        return ResponseEntity.ok().body(usuarioModelAssembler.toModel(usuarioService.buscarOuFalhar(id)));
+        Usuario usuario = usuarioService.buscarOuFalhar(id);
+        return ResponseEntity.ok(usuarioModelAssembler.toModel(usuario));
     }
 
     @PostMapping
     public ResponseEntity<UsuarioModel> salvar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
-        Usuario usuario = usuarioService.salvar(usuarioInputDisassembler.toDomainModel(usuarioInput));
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioModelAssembler.toModel(usuario));
+        Usuario usuario = usuarioInputDisassembler.toDomainModel(usuarioInput);
+        usuario = usuarioService.salvar(usuario);
+
+        URI uri = ResourceUriHelper.createUri(usuario.getId());
+
+        return ResponseEntity.created(uri)
+                .body(usuarioModelAssembler.toModel(usuario));
     }
 
     @PutMapping("/{id}")
@@ -55,7 +60,9 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         Usuario usuario = usuarioService.buscarOuFalhar(id);
         usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuario);
 
-        return ResponseEntity.ok().body(usuarioModelAssembler.toModel(usuarioService.salvar(usuario)));
+        usuario = usuarioService.salvar(usuario);
+
+        return ResponseEntity.ok(usuarioModelAssembler.toModel(usuario));
     }
 
     @DeleteMapping("/{id}")
