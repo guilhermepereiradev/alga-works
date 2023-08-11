@@ -13,8 +13,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 
 
@@ -31,7 +31,7 @@ public interface PedidoControllerOpenApi {
                     )
             }
     )
-    ResponseEntity<Page<PedidoResumoModel>> listar(@ParameterObject Pageable pageable, @ParameterObject PedidoFilterInput pedidoFilterInput);
+    ResponseEntity<PagedModel<PedidoResumoModel>> listar(@ParameterObject Pageable pageable, @ParameterObject PedidoFilterInput pedidoFilterInput);
 
 
     @Operation(

@@ -21,15 +21,15 @@ import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -57,6 +57,9 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PedidoFilterInputDisassembler pedidoFilterInputDisassembler;
 
+    @Autowired
+    private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+
 //    @GetMapping
 //    public ResponseEntity<MappingJacksonValue> listar(@RequestParam(required = false) String... campos){
 //        List<PedidoResumoModel> pedidoResumoModelList = pedidoResumoModelAssembler.toCollectionModel(pedidoService.listar());
@@ -75,18 +78,16 @@ public class PedidoController implements PedidoControllerOpenApi {
 //    }
 
     @GetMapping
-    public ResponseEntity<Page<PedidoResumoModel>> listar(Pageable pageable, PedidoFilterInput pedidoFilterInput) {
+    public ResponseEntity<PagedModel<PedidoResumoModel>> listar(Pageable pageable, PedidoFilterInput pedidoFilterInput) {
         pageable = traduzirPageable(pageable);
 
         Specification<Pedido> pedidoSpec = PedidoSpecs.usandoFiltro(pedidoFilterInputDisassembler.toDomainObject(pedidoFilterInput));
 
         Page<Pedido> pedidosPage = pedidoService.listar(pedidoSpec, pageable);
 
-        List<PedidoResumoModel> pedidoResumoModelList = pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
+        PagedModel<PedidoResumoModel> pedidosPagedModel = pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
 
-        Page<PedidoResumoModel> pedidoResumoModelPage = new PageImpl<>(pedidoResumoModelList, pageable, pedidosPage.getTotalElements());
-
-        return ResponseEntity.ok(pedidoResumoModelPage);
+        return ResponseEntity.ok(pedidosPagedModel);
     }
 
     @GetMapping("/{codigo}")

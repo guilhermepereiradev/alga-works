@@ -11,8 +11,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Cozinhas")
@@ -28,7 +28,7 @@ public interface CozinhaControllerOpenApi {
                     ),
             }
     )
-    ResponseEntity<Page<CozinhaModel>> listar(@ParameterObject Pageable pageable);
+    ResponseEntity<PagedModel<CozinhaModel>> listar(@ParameterObject Pageable pageable);
 
 
     @Operation(
