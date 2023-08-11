@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.assembler.FormaPagamentoInputDisassembler;
 import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
@@ -10,13 +11,13 @@ import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
+import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -49,10 +50,12 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
             return null;
         }
 
+        List<FormaPagamento> formasPagamento = formaPagamentoService.listar();
+
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
                 .eTag(eTag)
-                .body(formaPagamentoModelAssembler.toCollectionModels(formaPagamentoService.listar()));
+                .body(formaPagamentoModelAssembler.toCollectionModels(formasPagamento));
     }
 
     @GetMapping("/{id}")
@@ -70,16 +73,22 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
             return null;
         }
 
+        FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(id);
+
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
                 .eTag(eTag)
-                .body(formaPagamentoModelAssembler.toModel(formaPagamentoService.buscarOuFalhar(id)));
+                .body(formaPagamentoModelAssembler.toModel(formaPagamento));
     }
 
     @PostMapping
     public ResponseEntity<FormaPagamentoModel> salvar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
-        FormaPagamento formaPagamento = formaPagamentoService.salvar(formaPagamentoInputDisassembler.toDomainModel(formaPagamentoInput));
-        return ResponseEntity.status(HttpStatus.CREATED).body(formaPagamentoModelAssembler.toModel(formaPagamento));
+        FormaPagamento formaPagamento = formaPagamentoInputDisassembler.toDomainModel(formaPagamentoInput);
+        formaPagamento = formaPagamentoService.salvar(formaPagamento);
+
+        URI uri = ResourceUriHelper.createUri(formaPagamento.getId());
+
+        return ResponseEntity.created(uri).body(formaPagamentoModelAssembler.toModel(formaPagamento));
     }
 
     @PutMapping("/{id}")
@@ -87,7 +96,9 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         FormaPagamento formaPagamentoAtual = formaPagamentoService.buscarOuFalhar(id);
         formaPagamentoInputDisassembler.copyToDomainObject(formaPagamentoInput, formaPagamentoAtual);
 
-        return ResponseEntity.ok().body(formaPagamentoModelAssembler.toModel(formaPagamentoService.salvar(formaPagamentoAtual)));
+        formaPagamentoAtual = formaPagamentoService.salvar(formaPagamentoAtual);
+
+        return ResponseEntity.ok(formaPagamentoModelAssembler.toModel(formaPagamentoAtual));
     }
 
     @DeleteMapping("/{id}")

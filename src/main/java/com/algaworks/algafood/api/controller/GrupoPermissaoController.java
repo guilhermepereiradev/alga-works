@@ -25,7 +25,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     @GetMapping
     public ResponseEntity<List<PermissaoModel>> listar(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
-        return ResponseEntity.ok().body(permissaoAssembler.toCollectionModel(grupo.getPermissoes()));
+        return ResponseEntity.ok(permissaoAssembler.toCollectionModel(grupo.getPermissoes()));
     }
 
     @PutMapping("/{permissaoId}")

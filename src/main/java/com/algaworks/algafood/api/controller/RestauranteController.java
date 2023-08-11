@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.assembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.model.RestauranteModel;
@@ -20,7 +21,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -31,6 +31,7 @@ import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +55,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     @GetMapping
     public ResponseEntity<List<RestauranteModel>> listar() {
         List<Restaurante> restaurantes = restauranteService.listar();
-        return ResponseEntity.ok().body(restauranteModelAssembler.toCollectionModel(restaurantes));
+        return ResponseEntity.ok(restauranteModelAssembler.toCollectionModel(restaurantes));
     }
 
     @JsonView(RestauranteView.ApenasNome.class)
@@ -65,15 +66,20 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<RestauranteModel> buscar(@PathVariable Long id) {
-        return ResponseEntity.ok().body(restauranteModelAssembler.toModel(restauranteService.buscarOuFalhar(id)));
+        Restaurante restaurante = restauranteService.buscarOuFalhar(id);
+
+        return ResponseEntity.ok(restauranteModelAssembler.toModel(restaurante));
     }
 
     @PostMapping
     public ResponseEntity<RestauranteModel> adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
             Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
+            restaurante = restauranteService.salvar(restaurante);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(restauranteModelAssembler.toModel(restauranteService.salvar(restaurante)));
+            URI uri = ResourceUriHelper.createUri(restaurante.getId());
+
+            return ResponseEntity.created(uri).body(restauranteModelAssembler.toModel(restaurante));
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
@@ -86,7 +92,9 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         restauranteInputDisassembler.copyToDomainObject(restauranteInput, restauranteAtual);
 
         try {
-            return ResponseEntity.ok().body(restauranteModelAssembler.toModel(restauranteService.salvar(restauranteAtual)));
+            restauranteAtual = restauranteService.salvar(restauranteAtual);
+
+            return ResponseEntity.ok(restauranteModelAssembler.toModel(restauranteAtual));
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }

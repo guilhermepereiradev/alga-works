@@ -10,9 +10,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CadastroEstadoService {
     String MSG_ESTADO_EM_USO = "Estado de códio %d não pode ser removido pois está em uso";
+
     @Autowired
     private EstadoRepository estadoRepository;
 
@@ -37,5 +40,9 @@ public class CadastroEstadoService {
 
     public Estado buscarOuFalhar(Long id) {
         return estadoRepository.findById(id).orElseThrow(() -> new EstadoNaoEncontradoException(id));
+    }
+    
+    public List<Estado> listar(){ 
+        return estadoRepository.findAll();
     }
 }

@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.assembler.ProdutoInputDisassembler;
 import com.algaworks.algafood.api.assembler.ProdutoModelAssembler;
 import com.algaworks.algafood.api.model.ProdutoModel;
@@ -11,11 +12,11 @@ import com.algaworks.algafood.domain.service.CadastroProdutoService;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -36,20 +37,21 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 
     @GetMapping
     public ResponseEntity<List<ProdutoModel>> listar(@PathVariable Long restauranteId, @RequestParam(required = false) Boolean incluirInativo) {
-        List<ProdutoModel> produtoModelList;
+        List<Produto> produtos;
 
         if (incluirInativo != null && incluirInativo) {
-            produtoModelList = produtoModelAssembler.toCollectionModel(produtoService.buscarPeloRestauranteId(restauranteId));
+            produtos = produtoService.buscarPeloRestauranteId(restauranteId);
         } else {
-            produtoModelList = produtoModelAssembler.toCollectionModel(produtoService.buscarAtivosPeloRestaurante(restauranteId));
+            produtos = produtoService.buscarAtivosPeloRestaurante(restauranteId);
         }
 
-        return ResponseEntity.ok().body(produtoModelList);
+        return ResponseEntity.ok(produtoModelAssembler.toCollectionModel(produtos));
     }
 
     @GetMapping("/{produtoId}")
     public ResponseEntity<ProdutoModel> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
-        return ResponseEntity.ok().body(produtoModelAssembler.toModel(produtoService.buscarOuFalhar(restauranteId, produtoId)));
+        Produto produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
+        return ResponseEntity.ok(produtoModelAssembler.toModel(produto));
     }
 
     @PostMapping()
@@ -59,15 +61,20 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         Produto produto = produtoInputDisassembler.toDomainModel(produtoInput);
         produto.setRestaurante(restaurante);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoModelAssembler.toModel(produtoService.salvar(produto)));
+        produto = produtoService.salvar(produto);
+
+        URI uri = ResourceUriHelper.createUri(produto.getId());
+
+        return ResponseEntity.created(uri).body(produtoModelAssembler.toModel(produto));
     }
 
     @PutMapping("/{produtoId}")
     public ResponseEntity<ProdutoModel> atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput) {
         Produto produtoAtual = produtoService.buscarOuFalhar(restauranteId, produtoId);
-
         produtoInputDisassembler.copyToDomainObject(produtoInput, produtoAtual);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoModelAssembler.toModel(produtoService.salvar(produtoAtual)));
+        produtoAtual = produtoService.salvar(produtoAtual);
+
+        return ResponseEntity.ok(produtoModelAssembler.toModel(produtoAtual));
     }
 }

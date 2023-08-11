@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.assembler.PedidoFilterInputDisassembler;
 import com.algaworks.algafood.api.assembler.PedidoInputDisassembler;
 import com.algaworks.algafood.api.assembler.PedidoModelAssembler;
@@ -23,11 +24,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +71,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 //
 //        pedidoWrapper.setFilters(simpleFilterProvider);
 //
-//        return ResponseEntity.ok().body(pedidoWrapper);
+//        return ResponseEntity.ok(pedidoWrapper);
 //    }
 
     @GetMapping
@@ -90,7 +91,9 @@ public class PedidoController implements PedidoControllerOpenApi {
 
     @GetMapping("/{codigo}")
     public ResponseEntity<PedidoModel> buscar(@PathVariable String codigo) {
-        return ResponseEntity.ok(pedidoModelAssembler.toModel(pedidoService.buscarOuFalhar(codigo)));
+        Pedido pedido = pedidoService.buscarOuFalhar(codigo);
+
+        return ResponseEntity.ok(pedidoModelAssembler.toModel(pedido));
     }
 
     @PostMapping
@@ -99,8 +102,11 @@ public class PedidoController implements PedidoControllerOpenApi {
         pedido.setCliente(cadastroUsuarioService.buscarOuFalhar(1L)); // usuário fixo até implementar autenticação
 
         try {
-            PedidoModel pedidoModel = pedidoModelAssembler.toModel(emissaoPedidoService.emitirPedido(pedido));
-            return ResponseEntity.status(HttpStatus.CREATED).body(pedidoModel);
+            pedido = emissaoPedidoService.emitirPedido(pedido);
+
+            URI uri = ResourceUriHelper.createUri(pedido.getId());
+
+            return ResponseEntity.created(uri).body(pedidoModelAssembler.toModel(pedido));
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }

@@ -68,7 +68,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
         cozinha = cozinhaService.salvar(cozinha);
 
-        return ResponseEntity.ok().body(cozinhaModelAssembler.toModel(cozinha));
+        return ResponseEntity.ok(cozinhaModelAssembler.toModel(cozinha));
     }
 
     @DeleteMapping("/{id}")

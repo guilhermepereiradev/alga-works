@@ -17,26 +17,26 @@ import java.util.List;
 public class RestauranteFormaPagamentoController implements RestauranteFormaPagamentoControllerOpenApi {
 
     @Autowired
-    private CadastroRestauranteService cadastroRestaurante;
+    private CadastroRestauranteService restauranteService;
 
     @Autowired
     private FormaPagamentoModelAssembler formaPagamentoModelAssembler;
 
     @GetMapping
     public ResponseEntity<List<FormaPagamentoModel>> listar(@PathVariable Long restauranteId) {
-        Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
-        return ResponseEntity.ok().body(formaPagamentoModelAssembler.toCollectionModels(restaurante.getFormasPagamento()));
+        Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
+        return ResponseEntity.ok(formaPagamentoModelAssembler.toCollectionModels(restaurante.getFormasPagamento()));
     }
 
     @PutMapping("/{formaPagamentoId}")
     public ResponseEntity<Void> associarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
-        cadastroRestaurante.associarFormaPagamento(restauranteId, formaPagamentoId);
+        restauranteService.associarFormaPagamento(restauranteId, formaPagamentoId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{formaPagamentoId}")
     public ResponseEntity<Void> desassociarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
-        cadastroRestaurante.desassociarFormaPagamento(restauranteId, formaPagamentoId);
+        restauranteService.desassociarFormaPagamento(restauranteId, formaPagamentoId);
         return ResponseEntity.noContent().build();
     }
 }

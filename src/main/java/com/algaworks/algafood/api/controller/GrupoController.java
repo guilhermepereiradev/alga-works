@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.assembler.GrupoInputDisassempler;
 import com.algaworks.algafood.api.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.api.model.GrupoModel;
@@ -9,11 +10,11 @@ import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -31,27 +32,36 @@ public class GrupoController implements GrupoControllerOpenApi {
 
     @GetMapping
     public ResponseEntity<List<GrupoModel>> listar() {
-        return ResponseEntity.ok().body(grupoModelAssembler.toCollectionModels(grupoService.listar()));
+        List<Grupo> grupos = grupoService.listar();
+
+        return ResponseEntity.ok(grupoModelAssembler.toCollectionModels(grupos));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GrupoModel> buscar(@PathVariable Long id) {
-        return ResponseEntity.ok().body(grupoModelAssembler.toModel(grupoService.buscarOuFalhar(id)));
+        Grupo grupo = grupoService.buscarOuFalhar(id);
+
+        return ResponseEntity.ok(grupoModelAssembler.toModel(grupo));
     }
 
     @PostMapping
     public ResponseEntity<GrupoModel> salvar(@RequestBody @Valid GrupoInput grupoInput) {
-        Grupo grupo = grupoService.salvar(grupoInputDisassempler.toDomainModel(grupoInput));
-        return ResponseEntity.status(HttpStatus.CREATED).body(grupoModelAssembler.toModel(grupo));
+        Grupo grupo = grupoInputDisassempler.toDomainModel(grupoInput);
+        grupo = grupoService.salvar(grupo);
+
+        URI uri = ResourceUriHelper.createUri(grupo.getId());
+
+        return ResponseEntity.created(uri).body(grupoModelAssembler.toModel(grupo));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<GrupoModel> atualizar(@PathVariable Long id, @RequestBody @Valid GrupoInput grupoInput) {
         Grupo grupo = grupoService.buscarOuFalhar(id);
-
         grupoInputDisassempler.copyToDomainObject(grupoInput, grupo);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(grupoModelAssembler.toModel(grupoService.salvar(grupo)));
+        grupo = grupoService.salvar(grupo);
+
+        return ResponseEntity.ok(grupoModelAssembler.toModel(grupo));
     }
 
     @DeleteMapping("/{id}")

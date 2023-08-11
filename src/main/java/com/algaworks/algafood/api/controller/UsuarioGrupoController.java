@@ -26,7 +26,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     @GetMapping
     public ResponseEntity<List<GrupoModel>> listar(@PathVariable Long usuarioId) {
         Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
-        return ResponseEntity.ok().body(grupoModelAssembler.toCollectionModels(usuario.getGrupos()));
+        return ResponseEntity.ok(grupoModelAssembler.toCollectionModels(usuario.getGrupos()));
     }
 
     @PutMapping("/{grupoId}")

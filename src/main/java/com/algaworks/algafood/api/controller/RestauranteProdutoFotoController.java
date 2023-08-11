@@ -64,9 +64,9 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FotoProdutoModel> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
-        FotoProdutoModel fotoProdutoModel = fotoProdutoModelAssembler.toModel(
-                catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId));
-        return ResponseEntity.ok(fotoProdutoModel);
+        FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
+
+        return ResponseEntity.ok(fotoProdutoModelAssembler.toModel(fotoProduto));
     }
 
     @GetMapping(produces = MediaType.ALL_VALUE)
