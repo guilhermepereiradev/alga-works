@@ -10,6 +10,7 @@ import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.service.CadastroEstadoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +32,9 @@ public class EstadoController implements EstadoControllerOpenApi {
     private EstadoInputDisassembler estadoInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<EstadoModel>> listar() {
+    public ResponseEntity<CollectionModel<EstadoModel>> listar() {
         List<Estado> estados = estadoService.listar();
-        return ResponseEntity.ok(estadoModelAssembler.toCollectionModels(estados));
+        return ResponseEntity.ok(estadoModelAssembler.toCollectionModel(estados));
     }
 
     @GetMapping("/{id}")
