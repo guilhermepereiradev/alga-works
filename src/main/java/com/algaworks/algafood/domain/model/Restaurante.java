@@ -101,6 +101,22 @@ public class Restaurante {
         setAberto(false);
     }
 
+    public boolean podeAtivar(){
+        return !getAtivo();
+    }
+
+    public boolean podeInativar() {
+        return getAtivo();
+    }
+
+    public boolean podeAbrir() {
+        return !getAberto();
+    }
+
+    public boolean podeFechar() {
+        return getAberto();
+    }
+
     public void adicionarUsuarioResponsavel(Usuario usuario) {
         getUsuariosResponsaveis().add(usuario);
     }

@@ -28,6 +28,6 @@ public class PedidoResumoModel extends RepresentationModel<PedidoResumoModel> {
     private StatusPedido status;
     @Schema(example = "2023-11-02T20:34:04Z")
     private OffsetDateTime dataCriacao;
-    private RestauranteResumoModel restaurante;
+    private RestauranteApenasNomeModel restaurante;
     private UsuarioModel cliente;
 }

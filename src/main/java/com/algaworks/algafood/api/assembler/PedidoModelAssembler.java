@@ -39,7 +39,7 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
             pedidoModel.add(algaLinks.linkToEntregarPedido(pedido.getCodigo(), "entregar"));
         }
 
-        pedidoModel.add(algaLinks.linkToPedidos());
+        pedidoModel.add(algaLinks.linkToPedidos("pedidos"));
 
         pedidoModel.getRestaurante().add(algaLinks.linkToRestaurante(
                 pedidoModel.getRestaurante().getId()));
@@ -49,7 +49,7 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
         pedidoModel.getEnderecoEntrega().getCidade().add(algaLinks.linkToCidade(
                 pedidoModel.getEnderecoEntrega().getCidade().getId()));
 
-        pedidoModel.getFormaPagamento().add(algaLinks.linkToFomaPagamento(
+        pedidoModel.getFormaPagamento().add(algaLinks.linkToFormaPagamento(
                 pedidoModel.getFormaPagamento().getId()));
 
         pedidoModel.getItens().forEach(item ->

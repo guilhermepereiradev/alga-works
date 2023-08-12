@@ -1,6 +1,8 @@
 package com.algaworks.algafood.api.openapi.controller;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
+import com.algaworks.algafood.api.model.RestauranteApenasNomeModel;
+import com.algaworks.algafood.api.model.RestauranteBasicoModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.api.openapi.model.RestauranteBasicoModelOpenApi;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -34,10 +37,10 @@ public interface RestauranteControllerOpenApi {
                     description = "Restaurantes encontrados",
                     content = @Content(schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
     )
-    ResponseEntity<List<RestauranteModel>> listar();
+    ResponseEntity<CollectionModel<RestauranteBasicoModel>> listar();
 
     @Operation(summary = "Lista de restaurantes", hidden = true)
-    ResponseEntity<List<RestauranteModel>> listarApenasNome();
+    ResponseEntity<CollectionModel<RestauranteApenasNomeModel>> listarApenasNome();
 
     @Operation(
             summary = "Busca um restaurante por ID",

@@ -1,12 +1,15 @@
 package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.api.ResourceUriHelper;
+import com.algaworks.algafood.api.assembler.RestauranteApenasNomeModelAssembler;
+import com.algaworks.algafood.api.assembler.RestauranteBasicoModelAssembler;
 import com.algaworks.algafood.api.assembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
+import com.algaworks.algafood.api.model.RestauranteApenasNomeModel;
+import com.algaworks.algafood.api.model.RestauranteBasicoModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.CozinhaIdInput;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
-import com.algaworks.algafood.api.model.view.RestauranteView;
 import com.algaworks.algafood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -14,13 +17,13 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -49,19 +52,26 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     private RestauranteModelAssembler restauranteModelAssembler;
 
     @Autowired
+    private RestauranteBasicoModelAssembler restauranteBasicoModelAssembler;
+
+    @Autowired
     private RestauranteInputDisassembler restauranteInputDisassembler;
 
-    @JsonView(RestauranteView.Resumo.class)
+    @Autowired
+    private RestauranteApenasNomeModelAssembler restauranteApenasNomeModelAssembler;
+
+//    @JsonView(RestauranteView.Resumo.class)
     @GetMapping
-    public ResponseEntity<List<RestauranteModel>> listar() {
+    public ResponseEntity<CollectionModel<RestauranteBasicoModel>> listar() {
         List<Restaurante> restaurantes = restauranteService.listar();
-        return ResponseEntity.ok(restauranteModelAssembler.toCollectionModel(restaurantes));
+        return ResponseEntity.ok(restauranteBasicoModelAssembler.toCollectionModel(restaurantes));
     }
 
-    @JsonView(RestauranteView.ApenasNome.class)
+//    @JsonView(RestauranteView.ApenasNome.class)
     @GetMapping(params = "projecao=apenas-nome")
-    public ResponseEntity<List<RestauranteModel>> listarApenasNome() {
-        return listar();
+    public ResponseEntity<CollectionModel<RestauranteApenasNomeModel>> listarApenasNome() {
+        List<Restaurante> restaurantes = restauranteService.listar();
+        return ResponseEntity.ok(restauranteApenasNomeModelAssembler.toCollectionModel(restaurantes));
     }
 
     @GetMapping("/{id}")
