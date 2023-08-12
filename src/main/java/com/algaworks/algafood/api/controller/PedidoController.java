@@ -10,6 +10,7 @@ import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoFilterInput;
 import com.algaworks.algafood.api.model.input.PedidoInput;
 import com.algaworks.algafood.api.openapi.controller.PedidoControllerOpenApi;
+import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -79,12 +80,12 @@ public class PedidoController implements PedidoControllerOpenApi {
 
     @GetMapping
     public ResponseEntity<PagedModel<PedidoResumoModel>> listar(Pageable pageable, PedidoFilterInput pedidoFilterInput) {
-        pageable = traduzirPageable(pageable);
+        Pageable pageableTraduzido = traduzirPageable(pageable);
 
         Specification<Pedido> pedidoSpec = PedidoSpecs.usandoFiltro(pedidoFilterInputDisassembler.toDomainObject(pedidoFilterInput));
+        Page<Pedido> pedidosPage = pedidoService.listar(pedidoSpec, pageableTraduzido);
 
-        Page<Pedido> pedidosPage = pedidoService.listar(pedidoSpec, pageable);
-
+        pedidosPage = new PageWrapper<>(pedidosPage, pageable);
         PagedModel<PedidoResumoModel> pedidosPagedModel = pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
 
         return ResponseEntity.ok(pedidosPagedModel);
@@ -117,7 +118,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     private Pageable traduzirPageable(Pageable apiPageable) {
         var mapeamento = Map.of(
                 "codigo", "codigo",
-                "subTotal", "subTotal",
+                "subtotal", "subtotal",
                 "taxaFrete", "taxaFrete",
                 "valorTotal", "valorTotal",
                 "dataCriacao", "dataCriacao",
