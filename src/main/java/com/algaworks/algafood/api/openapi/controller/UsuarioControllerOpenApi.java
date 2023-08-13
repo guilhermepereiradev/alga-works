@@ -5,6 +5,7 @@ import com.algaworks.algafood.api.model.UsuarioModel;
 import com.algaworks.algafood.api.model.input.SenhaInput;
 import com.algaworks.algafood.api.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafood.api.model.input.UsuarioInput;
+import com.algaworks.algafood.api.openapi.model.UsuariosCollectionModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,7 +18,16 @@ import org.springframework.http.ResponseEntity;
 @Tag(name = "Usuários")
 public interface UsuarioControllerOpenApi {
 
-    @Operation(summary = "Lista os usuários")
+    @Operation(
+            summary = "Lista os usuários",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Usuários encontrado",
+                            content = @Content(schema = @Schema(implementation = UsuariosCollectionModelOpenApi.class))
+                    )
+            }
+    )
     ResponseEntity<CollectionModel<UsuarioModel>> listar();
 
     @Operation(
@@ -27,7 +37,7 @@ public interface UsuarioControllerOpenApi {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Usuário encontrado",
-                            content = @Content(schema = @Schema(implementation = UsuarioModel.class))
+                            content = @Content(schema = @Schema(implementation = UsuariosCollectionModelOpenApi.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",

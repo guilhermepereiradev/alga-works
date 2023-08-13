@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.openapi.controller;
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.EstadoModel;
 import com.algaworks.algafood.api.model.input.EstadoInput;
+import com.algaworks.algafood.api.openapi.model.EstadosCollectionModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,7 +16,14 @@ import org.springframework.http.ResponseEntity;
 @Tag(name = "Estados")
 public interface EstadoControllerOpenApi {
 
-    @Operation(summary = "Lista dos estados")
+    @Operation(
+            summary = "Lista dos estados",
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "Estados encontrado",
+                    content = @Content(schema = @Schema(implementation = EstadosCollectionModelOpenApi.class))
+            )
+    )
     ResponseEntity<CollectionModel<EstadoModel>> listar();
 
     @Operation(

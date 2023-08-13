@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.openapi.controller;
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.GrupoModel;
 import com.algaworks.algafood.api.model.input.GrupoInput;
+import com.algaworks.algafood.api.openapi.model.GruposCollectionModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,7 +16,15 @@ import org.springframework.http.ResponseEntity;
 @Tag(name = "Grupos")
 public interface GrupoControllerOpenApi {
 
-    @Operation(summary = "Lista dos grupos")
+    @Operation(
+            summary = "Lista dos grupos",
+            responses =
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Grupo encontrado",
+                            content = @Content(schema = @Schema(implementation = GruposCollectionModelOpenApi.class))
+                    )
+    )
     ResponseEntity<CollectionModel<GrupoModel>> listar();
 
     @Operation(

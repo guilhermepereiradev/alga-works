@@ -5,7 +5,7 @@ import com.algaworks.algafood.api.model.RestauranteApenasNomeModel;
 import com.algaworks.algafood.api.model.RestauranteBasicoModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
-import com.algaworks.algafood.api.openapi.model.RestauranteBasicoModelOpenApi;
+import com.algaworks.algafood.api.openapi.model.RestaurantesCollectionModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -35,7 +35,7 @@ public interface RestauranteControllerOpenApi {
             responses = @ApiResponse(
                     responseCode = "200",
                     description = "Restaurantes encontrados",
-                    content = @Content(schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
+                    content = @Content(schema = @Schema(implementation = RestaurantesCollectionModelOpenApi.class)))
     )
     ResponseEntity<CollectionModel<RestauranteBasicoModel>> listar();
 

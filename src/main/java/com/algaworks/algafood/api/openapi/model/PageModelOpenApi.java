@@ -11,7 +11,11 @@ import java.util.List;
 @Setter
 public class PageModelOpenApi<T> {
 
-    private List<T> content;
+    @Schema(name = "_embedded")
+    private List<T> embedded;
+
+    @Schema(name = "_links")
+    private LinksModelOpenApi links;
 
     @Schema(example = "50", description = "Quantidade de registros por página")
     private int size;

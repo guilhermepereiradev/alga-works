@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.openapi.controller;
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.ProdutoModel;
 import com.algaworks.algafood.api.model.input.ProdutoInput;
+import com.algaworks.algafood.api.openapi.model.ProdutosCollectionModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -24,14 +25,15 @@ public interface RestauranteProdutoControllerOpenApi {
                     @Parameter(name = "restauranteId", description = "ID de um restaurante", example = "1"),
                     @Parameter(
                             description = "Retorna produtos inativos",
-                            name = "incluirInativo", in = ParameterIn.QUERY,
+                            name = "incluirInativos", in = ParameterIn.QUERY,
                             schema = @Schema(description = "true", type = "boolean", allowableValues = {"true", "false"})
                     )
             },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Produtos encontrado"
+                            description = "Produtos encontrado",
+                            content = @Content(schema = @Schema(implementation = ProdutosCollectionModelOpenApi.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",

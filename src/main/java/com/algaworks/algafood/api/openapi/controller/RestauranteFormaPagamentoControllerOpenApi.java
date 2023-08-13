@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.openapi.controller;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
+import com.algaworks.algafood.api.openapi.model.FormasPagamentoCollectionModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +21,8 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Formas de pagamento encontradas"),
+                            description = "Formas de pagamento encontradas",
+                            content = @Content(schema = @Schema(implementation = FormasPagamentoCollectionModelOpenApi.class))),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Restaurante não encontrado",

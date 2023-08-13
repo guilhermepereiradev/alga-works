@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.api.AlgaLinks;
+import com.algaworks.algafood.api.openapi.controller.RootEntryPointOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.MediaType;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RootEntryPointController {
+public class RootEntryPointController implements RootEntryPointOpenApi {
 
     @Autowired
     private AlgaLinks algaLinks;
@@ -29,6 +30,7 @@ public class RootEntryPointController {
         rootEntryPointModel.add(algaLinks.linkToFormasPagamento("formas-pagamento"));
         rootEntryPointModel.add(algaLinks.linkToEstados("estados"));
         rootEntryPointModel.add(algaLinks.linkToCidades("cidades"));
+        rootEntryPointModel.add(algaLinks.linkToEstatisticas("estatisticas"));
 
         return ResponseEntity.ok(rootEntryPointModel);
     }

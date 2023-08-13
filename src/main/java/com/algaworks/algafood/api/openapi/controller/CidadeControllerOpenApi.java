@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.openapi.controller;
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.CidadeModel;
 import com.algaworks.algafood.api.model.input.CidadeInput;
+import com.algaworks.algafood.api.openapi.model.CidadesCollectionModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,7 +15,16 @@ import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Cidades")
 public interface CidadeControllerOpenApi {
-    @Operation(summary = "Lista as cidades")
+
+
+    @Operation(
+            summary = "Lista as cidades",
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "Cidades encontrada",
+                    content = @Content(schema = @Schema(implementation = CidadesCollectionModelOpenApi.class))
+            )
+    )
     ResponseEntity<CollectionModel<CidadeModel>> listar();
 
     @Operation(

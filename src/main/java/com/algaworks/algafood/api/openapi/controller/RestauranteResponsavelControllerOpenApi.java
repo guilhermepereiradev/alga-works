@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.openapi.controller;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.UsuarioModel;
+import com.algaworks.algafood.api.openapi.model.UsuariosCollectionModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +21,9 @@ public interface RestauranteResponsavelControllerOpenApi {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Usuários encontradas"),
+                            description = "Usuários encontradas",
+                            content = @Content(schema = @Schema(implementation = UsuariosCollectionModelOpenApi.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Restaurante não encontrado",

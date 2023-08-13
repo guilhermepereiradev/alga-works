@@ -1,6 +1,8 @@
 package com.algaworks.algafood.core.openapi;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
+import com.algaworks.algafood.api.openapi.model.CollectionModelOpenApi;
+import com.algaworks.algafood.api.openapi.model.LinksModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PageModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PageableModelOpenApi;
 import io.swagger.v3.core.converter.ModelConverters;
@@ -20,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Links;
 import org.springframework.http.HttpStatus;
 
 import java.lang.reflect.Type;
@@ -38,7 +41,8 @@ public class SpringDocConfig {
         getConfig()
                 .replaceParameterObjectWithClass(Pageable.class, PageableModelOpenApi.class)
                 .replaceParameterObjectWithClass(PageRequest.class, PageableModelOpenApi.class)
-                .replaceWithClass(Page.class, PageModelOpenApi.class);
+                .replaceWithClass(Page.class, PageModelOpenApi.class)
+                .replaceWithClass(Links.class, LinksModelOpenApi.class);
     }
 
     @Bean
@@ -50,6 +54,7 @@ public class SpringDocConfig {
                 .addOpenApiCustomizer(addSchema(Problem.class))
                 .addOpenApiCustomizer(addSchema(Problem.Object.class))
                 .addOpenApiCustomizer(addSchema(PageModelOpenApi.class))
+                .addOpenApiCustomizer(addSchema(CollectionModelOpenApi.class))
                 .addOpenApiCustomizer(globalGetResponseMessages())
                 .addOpenApiCustomizer(globalPostPutResponseMessages())
                 .addOpenApiCustomizer(globalDeleteResponseMessages())
@@ -70,7 +75,9 @@ public class SpringDocConfig {
                 .addTagsItem(new Tag().name("Estados").description("Gerencia os estados"))
                 .addTagsItem(new Tag().name("Produtos").description("Gerencia os produtos"))
                 .addTagsItem(new Tag().name("Usuários").description("Gerencia os usuários"))
-                .addTagsItem(new Tag().name("Estatísticas").description("Estatísticas da AlgaFood"));
+                .addTagsItem(new Tag().name("Estatísticas").description("Estatísticas da AlgaFood"))
+                .addTagsItem(new Tag().name("Permissões").description("Lista as permissões de usuários"))
+                .addTagsItem(new Tag().name("Root Entry Point").description("Root Entry Point"));
 
     }
 

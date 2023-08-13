@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.openapi.controller;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.PermissaoModel;
+import com.algaworks.algafood.api.openapi.model.PermissoesCollectionModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +22,8 @@ public interface GrupoPermissaoControllerOpenApi {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Permissões encontradas"
+                            description = "Permissões encontradas",
+                            content = @Content(schema = @Schema(implementation = PermissoesCollectionModelOpenApi.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",

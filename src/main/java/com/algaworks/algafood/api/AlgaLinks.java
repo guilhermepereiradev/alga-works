@@ -32,7 +32,6 @@ public class AlgaLinks {
         return Link.of(UriTemplate.of(pedidosUrl, PAGINACAO_VARIABLES.concat(filtroVariables)), rel);
     }
 
-
     public Link linkToConfirmacaoPedido(String codigoPedido, String rel) {
         return linkTo(methodOn(FluxoPedidoController.class)
                 .confirmar(codigoPedido))
@@ -159,6 +158,11 @@ public class AlgaLinks {
     public Link linkToEstados(String rel) {
         return linkTo(EstadoController.class)
                 .withRel(rel);
+    }
+
+    public Link linkToEstados() {
+        return linkTo(EstadoController.class)
+                .withRel(IanaLinkRelations.SELF);
     }
 
     public Link linkToGrupoUsuarios(Long usuarioId, String rel) {
@@ -351,5 +355,23 @@ public class AlgaLinks {
         return linkTo(methodOn(UsuarioGrupoController.class)
                 .associar(usuarioId, null))
                 .withRel(rel);
+    }
+
+    public Link linkToEstatisticas(String rel) {
+        return linkTo(EstatisticasController.class).withRel(rel);
+    }
+
+    public Link linkToEstatisticasVendasDiarias(String rel) {
+
+        TemplateVariables vendaDiariaFilterVariables = new TemplateVariables(
+                new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoInicio", VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoFim", VariableType.REQUEST_PARAM),
+                new TemplateVariable("timeOffset", VariableType.REQUEST_PARAM));
+
+        String vendasDiariasUrl = linkTo(methodOn(EstatisticasController.class)
+                .consultarVendasDiarias(null, null)).toUri().toString();
+
+        return Link.of(UriTemplate.of(vendasDiariasUrl, vendaDiariaFilterVariables), rel);
     }
 }
