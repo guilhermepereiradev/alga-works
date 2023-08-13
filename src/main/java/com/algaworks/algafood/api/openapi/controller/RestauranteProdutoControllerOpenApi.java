@@ -10,10 +10,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Tag(name = "Produtos")
 public interface RestauranteProdutoControllerOpenApi {
@@ -46,7 +45,7 @@ public interface RestauranteProdutoControllerOpenApi {
                     )
             }
     )
-    ResponseEntity<List<ProdutoModel>> listar(Long restauranteId, @RequestParam(required = false) Boolean incluirInativo);
+    ResponseEntity<CollectionModel<ProdutoModel>> listar(Long restauranteId, @RequestParam(required = false) Boolean incluirInativo);
 
     @Operation(
             summary = "Busca produto de um restaurante por id",

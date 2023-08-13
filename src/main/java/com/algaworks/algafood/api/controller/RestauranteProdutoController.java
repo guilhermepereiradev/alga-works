@@ -12,6 +12,7 @@ import com.algaworks.algafood.domain.service.CadastroProdutoService;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,16 +37,16 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     private ProdutoInputDisassembler produtoInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<ProdutoModel>> listar(@PathVariable Long restauranteId, @RequestParam(required = false) Boolean incluirInativo) {
+    public ResponseEntity<CollectionModel<ProdutoModel>> listar(@PathVariable Long restauranteId, @RequestParam(required = false) Boolean incluirInativos) {
         List<Produto> produtos;
 
-        if (incluirInativo != null && incluirInativo) {
+        if (incluirInativos != null && incluirInativos) {
             produtos = produtoService.buscarPeloRestauranteId(restauranteId);
         } else {
             produtos = produtoService.buscarAtivosPeloRestaurante(restauranteId);
         }
 
-        return ResponseEntity.ok(produtoModelAssembler.toCollectionModel(produtos));
+        return ResponseEntity.ok(produtoModelAssembler.toCollectionModel(produtos, restauranteId));
     }
 
     @GetMapping("/{produtoId}")

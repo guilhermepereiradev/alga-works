@@ -8,9 +8,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Tag(name = "Grupos")
 public interface GrupoPermissaoControllerOpenApi {
@@ -36,7 +35,7 @@ public interface GrupoPermissaoControllerOpenApi {
                     )
             }
     )
-    ResponseEntity<List<PermissaoModel>> listar(Long grupoId);
+    ResponseEntity<CollectionModel<PermissaoModel>> listar(Long grupoId);
 
     @Operation(
             summary = "Associação de permissão com grupo",

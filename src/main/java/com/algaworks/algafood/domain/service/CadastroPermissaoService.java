@@ -6,6 +6,8 @@ import com.algaworks.algafood.domain.repository.PermissaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CadastroPermissaoService {
 
@@ -14,5 +16,9 @@ public class CadastroPermissaoService {
 
     public Permissao buscarOuFalhar(Long id) {
         return repository.findById(id).orElseThrow(() -> new PermissaoNaoEncontradaException(id));
+    }
+
+    public List<Permissao> listar() {
+        return repository.findAll();
     }
 }

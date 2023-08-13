@@ -10,6 +10,7 @@ import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +32,10 @@ public class GrupoController implements GrupoControllerOpenApi {
     private GrupoInputDisassempler grupoInputDisassempler;
 
     @GetMapping
-    public ResponseEntity<List<GrupoModel>> listar() {
+    public ResponseEntity<CollectionModel<GrupoModel>> listar() {
         List<Grupo> grupos = grupoService.listar();
 
-        return ResponseEntity.ok(grupoModelAssembler.toCollectionModels(grupos));
+        return ResponseEntity.ok(grupoModelAssembler.toCollectionModel(grupos));
     }
 
     @GetMapping("/{id}")

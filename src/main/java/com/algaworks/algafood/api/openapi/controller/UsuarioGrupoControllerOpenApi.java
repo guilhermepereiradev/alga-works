@@ -8,9 +8,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Tag(name = "Usuários")
 public interface UsuarioGrupoControllerOpenApi {
@@ -35,7 +34,7 @@ public interface UsuarioGrupoControllerOpenApi {
                     )
             }
     )
-    ResponseEntity<List<GrupoModel>> listar(Long usuarioId);
+    ResponseEntity<CollectionModel<GrupoModel>> listar(Long usuarioId);
 
     @Operation(
             summary = "Associação de grupo com usuário",

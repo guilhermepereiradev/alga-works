@@ -9,16 +9,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
-
-import java.util.List;
 
 @Tag(name = "Formas de Pagamento")
 public interface FormaPagamentoControllerOpenApi {
 
     @Operation(summary = "Lista as formas de pagamento")
-    ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request);
+    ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request);
 
     @Operation(
             summary = "Busca uma forma de pagamento por ID",

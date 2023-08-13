@@ -1,16 +1,16 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/restaurantes/{restauranteId}/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -22,10 +22,26 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     @Autowired
     private FormaPagamentoModelAssembler formaPagamentoModelAssembler;
 
+    @Autowired
+    private AlgaLinks algaLinks;
+
     @GetMapping
-    public ResponseEntity<List<FormaPagamentoModel>> listar(@PathVariable Long restauranteId) {
+    public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
-        return ResponseEntity.ok(formaPagamentoModelAssembler.toCollectionModels(restaurante.getFormasPagamento()));
+        CollectionModel<FormaPagamentoModel> formasPagamentoCollectionModel
+                = formaPagamentoModelAssembler.toCollectionModel(restaurante.getFormasPagamento());
+
+        formasPagamentoCollectionModel.removeLinks()
+                .add(algaLinks.linkToRestaurantesFormasPagamento(restauranteId));
+
+        formasPagamentoCollectionModel.getContent().forEach(formaPagamentoModel ->
+            formaPagamentoModel.add(algaLinks.linkToRestauranteFormasPagamentoDesassociacao(
+                    restauranteId, formaPagamentoModel.getId(), "desassociar"))
+        );
+
+        formasPagamentoCollectionModel.add(algaLinks.linkToRestauranteFormasPagamentoAssociacao(restauranteId, "associar"));
+
+        return ResponseEntity.ok(formasPagamentoCollectionModel);
     }
 
     @PutMapping("/{formaPagamentoId}")

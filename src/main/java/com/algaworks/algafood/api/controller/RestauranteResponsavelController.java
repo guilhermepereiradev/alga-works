@@ -33,6 +33,12 @@ public class RestauranteResponsavelController implements RestauranteResponsavelC
                         .removeLinks()
                         .add(algaLinks.linkToResponsaveisRestaurante(restauranteId));
 
+        usuarioCollectionModel.getContent().forEach(usuarioModel ->
+                usuarioModel.add(algaLinks.linkToRestauranteResponsaveisDessassociar(
+                        restauranteId, usuarioModel.getId(), "desassociar")));
+
+        usuarioCollectionModel.add(algaLinks.linkToRestauranteResponsaveisAssociar(restauranteId, "associar"));
+
         return ResponseEntity.ok(usuarioCollectionModel);
     }
 
