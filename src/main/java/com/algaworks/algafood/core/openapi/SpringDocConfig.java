@@ -1,10 +1,10 @@
 package com.algaworks.algafood.core.openapi;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
-import com.algaworks.algafood.api.openapi.model.CollectionModelOpenApi;
-import com.algaworks.algafood.api.openapi.model.LinksModelOpenApi;
-import com.algaworks.algafood.api.openapi.model.PageModelOpenApi;
-import com.algaworks.algafood.api.openapi.model.PageableModelOpenApi;
+import com.algaworks.algafood.api.v1.openapi.model.CollectionModelOpenApi;
+import com.algaworks.algafood.api.v1.openapi.model.LinksModelOpenApi;
+import com.algaworks.algafood.api.v1.openapi.model.PageModelOpenApi;
+import com.algaworks.algafood.api.v1.openapi.model.PageableModelOpenApi;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.PathItem;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
-import io.swagger.v3.oas.models.tags.Tag;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
@@ -46,10 +45,10 @@ public class SpringDocConfig {
     }
 
     @Bean
-    public GroupedOpenApi groupedOpenApi() {
+    public GroupedOpenApi groupedOpenApiV1() {
         return GroupedOpenApi.builder()
-                .group("com.algaworks.algafood.api")
-                .pathsToMatch("/**")
+                .group("V1")
+                .pathsToMatch("/v1/**")
                 .addOpenApiCustomizer(addSchema(PageableModelOpenApi.class))
                 .addOpenApiCustomizer(addSchema(Problem.class))
                 .addOpenApiCustomizer(addSchema(Problem.Object.class))
@@ -62,22 +61,25 @@ public class SpringDocConfig {
     }
 
     @Bean
+    public GroupedOpenApi groupedOpenApiV2() {
+        return GroupedOpenApi.builder()
+                .group("V2")
+                .pathsToMatch("/v2/**")
+                .addOpenApiCustomizer(addSchema(PageableModelOpenApi.class))
+                .addOpenApiCustomizer(addSchema(Problem.class))
+                .addOpenApiCustomizer(addSchema(Problem.Object.class))
+                .addOpenApiCustomizer(addSchema(CollectionModelOpenApi.class))
+                .addOpenApiCustomizer(globalGetResponseMessages())
+                .addOpenApiCustomizer(globalPostPutResponseMessages())
+                .addOpenApiCustomizer(globalDeleteResponseMessages())
+                .build();
+    }
+
+    @Bean
     public OpenAPI openAPI() {
         return new OpenAPI().info(new Info().title("Algafood API")
                         .description("API aberta para clientes e restaurantes")
-                        .version("1"))
-                .addTagsItem(new Tag().name("Cidades").description("Gerencia as cidades"))
-                .addTagsItem(new Tag().name("Grupos").description("Gerencia os grupos de usuários"))
-                .addTagsItem(new Tag().name("Cozinhas").description("Gerencia as cozinhas"))
-                .addTagsItem(new Tag().name("Formas de Pagamento").description("Gerencia as formas de pagamento"))
-                .addTagsItem(new Tag().name("Pedidos").description("Gerencia os pedidos"))
-                .addTagsItem(new Tag().name("Restaurantes").description("Gerencia os restaurantes"))
-                .addTagsItem(new Tag().name("Estados").description("Gerencia os estados"))
-                .addTagsItem(new Tag().name("Produtos").description("Gerencia os produtos"))
-                .addTagsItem(new Tag().name("Usuários").description("Gerencia os usuários"))
-                .addTagsItem(new Tag().name("Estatísticas").description("Estatísticas da AlgaFood"))
-                .addTagsItem(new Tag().name("Permissões").description("Lista as permissões de usuários"))
-                .addTagsItem(new Tag().name("Root Entry Point").description("Root Entry Point"));
+                        .version("v1"));
 
     }
 

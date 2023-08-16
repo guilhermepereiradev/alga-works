@@ -115,7 +115,7 @@
             <groupId>org.springframework.hateoas</groupId>
             <artifactId>spring-hateoas</artifactId>
         </dependency>
-    </dependencies>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
