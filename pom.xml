@@ -22,6 +22,7 @@
 		<jasperreports.version>6.20.1</jasperreports.version>
 		<aws-java-sdk-s3.version>1.12.512</aws-java-sdk-s3.version>
 		<springdoc.openapi.version>2.0.0</springdoc.openapi.version>
+		<logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
 	</properties>
 
 	<dependencies>
@@ -115,6 +116,11 @@
             <groupId>org.springframework.hateoas</groupId>
             <artifactId>spring-hateoas</artifactId>
         </dependency>
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-loggly</artifactId>
+			<version>${logback-ext-loggly.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
